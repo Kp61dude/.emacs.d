@@ -1,1 +1,19 @@
-/auto-save-list/
+.last-package-update-day
+.lsp-session-v1
+.mc-lists.el
+all-the-icons-fonts/
+auto-save-list/
+# bookmarks
+config.json
+elpa/
+elpy/
+forge-database.sqlite
+# init.el
+plugins/
+projectile-bookmarks.eld
+projectile.cache
+# recentf
+server/
+snippets/
+transient/
+var/
