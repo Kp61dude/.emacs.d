@@ -66,7 +66,7 @@
 ;; - spacemacs-dark
 ;; - sourcerer
 ;; - doom-* (the doom themes https://github.com/hlissner/emacs-doom-themes)
-(defvar my:use-theme 'sourcerer)
+(defvar my:use-theme 'spacemacs-dark)
 
 ;; Set my:use-dvorak-bindings to t if you use a Dvorak keyboard layout
 (defvar my:use-dvorak-bindings nil)
