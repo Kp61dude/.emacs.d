@@ -1863,7 +1863,11 @@
   ;; brought over from my own setup
   (setq ispell-hunspell-dict-paths-alist
 <<<<<<< HEAD
+<<<<<<< HEAD
         '(("en_US" "~/Hunspell/dictionaries/en_US.aff")))
+=======
+        '(("en_US" "~/hunspell/dictionary/en_US.aff")))
+>>>>>>> 6687449b04eb91ba3ccd50bf05f83152ce7c1292
 =======
         '(("en_US" "~/hunspell/dictionary/en_US.aff")))
 >>>>>>> 6687449b04eb91ba3ccd50bf05f83152ce7c1292
