@@ -2057,6 +2057,7 @@
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   ;; Add snippet support to lsp mode
   (setq lsp-enable-snippet t)
+  (yas-global-mode t)
   )
 (use-package yasnippet-snippets
   :ensure t
