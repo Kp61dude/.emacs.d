@@ -66,7 +66,7 @@
 ;; - spacemacs-dark
 ;; - sourcerer
 ;; - doom-* (the doom themes https://github.com/hlissner/emacs-doom-themes)
-(defvar my:use-theme 'spacemacs-dark)
+(defvar my:use-theme 'doom-one)
 
 ;; Set my:use-dvorak-bindings to t if you use a Dvorak keyboard layout
 (defvar my:use-dvorak-bindings nil)
@@ -1862,7 +1862,11 @@
   (define-key flyspell-mode-map (kbd "C-;") nil) ; turn this off as it runs into iedit default keybinding
   ;; brought over from my own setup
   (setq ispell-hunspell-dict-paths-alist
+<<<<<<< HEAD
         '(("en_US" "~/Hunspell/dictionaries/en_US.aff")))
+=======
+        '(("en_US" "~/hunspell/dictionary/en_US.aff")))
+>>>>>>> 6687449b04eb91ba3ccd50bf05f83152ce7c1292
   (setq ispell-local-dictionary "en_US")
   )
 
@@ -2057,6 +2061,7 @@
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   ;; Add snippet support to lsp mode
   (setq lsp-enable-snippet t)
+  (yas-global-mode t)
   )
 (use-package yasnippet-snippets
   :ensure t
@@ -2457,6 +2462,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;;; smartparens
+(use-package smartparens
+  :ensure t
+  :config
+  (smartparens-global-mode t))
+
+;;; keep init.el clean and move custom-set-variables to ~/custom.el
+(setq custom-file (concat user-emacs-directory "custom.el"))
+(if (file-exists-p custom-file)
+    (load custom-file))
 
 ;;; Set up .bat file mode
 (use-package bat-mode
