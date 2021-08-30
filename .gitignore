@@ -19,3 +19,4 @@ snippets/
 transient/
 var/
 /old_init.el
+/flycheck_init.el
