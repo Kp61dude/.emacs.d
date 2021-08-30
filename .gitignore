@@ -18,3 +18,4 @@ server/
 snippets/
 transient/
 var/
+/old_init.el

@@ -66,7 +66,7 @@
 ;; - spacemacs-dark
 ;; - sourcerer
 ;; - doom-* (the doom themes https://github.com/hlissner/emacs-doom-themes)
-(defvar my:use-theme 'spacemacs-dark)
+(defvar my:use-theme 'doom-one)
 
 ;; Set my:use-dvorak-bindings to t if you use a Dvorak keyboard layout
 (defvar my:use-dvorak-bindings nil)
@@ -1163,6 +1163,7 @@
   :ensure t
   :bind (("M-s" . avy-goto-word-1)
          ("M-c" . avy-goto-char-2)
+         ([remap exit-recursive-edit] . capitalize-word) ; replace the above key-combo with new 2021-08-29
          ("C-'" . avy-goto-char)
          ([remap goto-line] . avy-goto-line))
   ;; Set keys for Dvorak mode instead of qwerty
@@ -1862,7 +1863,7 @@
   (define-key flyspell-mode-map (kbd "C-;") nil) ; turn this off as it runs into iedit default keybinding
   ;; brought over from my own setup
   (setq ispell-hunspell-dict-paths-alist
-        '(("en_US" "C:/Users/EricSapiens/AppData/Roaming/bin/hunspell/dictionary/en_US.aff")))
+        '(("en_US" "~/Hunspell/hunspell-msvc-Release-x64/dictionaries/en_US.aff"))) ; updated 2021-08-29
   (setq ispell-local-dictionary "en_US")
   )
 
@@ -2057,6 +2058,7 @@
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   ;; Add snippet support to lsp mode
   (setq lsp-enable-snippet t)
+  (yas-global-mode t)                   ; added on 2021-08-29
   )
 (use-package yasnippet-snippets
   :ensure t
@@ -2458,6 +2460,17 @@
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; smartparens
+(use-package smartparens
+  :ensure t
+  :config
+  (smartparens-global-mode t))
+
+;;; keep init.el clean and move custom-set-variables to ~/custom.el
+(setq custom-file (concat user-emacs-directory "custom.el"))
+(if (file-exists-p custom-file)
+    (load custom-file))
+
 ;;; Set up .bat file mode
 (use-package bat-mode
   :init
@@ -2636,4 +2649,3 @@
 
 
 (provide '.emacs)
-;;; .emacs ends here
