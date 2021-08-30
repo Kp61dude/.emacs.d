@@ -1862,7 +1862,7 @@
   (define-key flyspell-mode-map (kbd "C-;") nil) ; turn this off as it runs into iedit default keybinding
   ;; brought over from my own setup
   (setq ispell-hunspell-dict-paths-alist
-        '(("en_US" "C:/Users/EricSapiens/AppData/Roaming/bin/hunspell/dictionary/en_US.aff")))
+        '(("en_US" "~/Hunspell/dictionaries/en_US.aff")))
   (setq ispell-local-dictionary "en_US")
   )
 
