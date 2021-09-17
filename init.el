@@ -75,6 +75,7 @@
 ;; key. The commands are:
 ;; - xb starts switch-buffer
 ;; - xf starts find-file or counsel-find-file
+;; - xd starts dired (directory)
 ;; - xg starts Magit status
 ;; - xh starts hydra-dispatch
 ;; - xn starts hydra-move
@@ -536,9 +537,11 @@
     ("n" next-line)
     ("p" previous-line)
     ("f" forward-char)
+    ("F" forward-sexp)
     ("b" backward-char)
-    ("a" beginning-of-line)
-    ("e" move-end-of-line)
+    ("B" backward-sexp)
+    ("a" mwim-beginning-of-code-or-line) ;; ("a" beginning-of-line) 2021-09-17
+    ("e" mwim-end-of-code-or-line) ;; ("e" move-end-of-line) 2021-09-17
     ("u" forward-word)
     ("o" backward-word)
     ("M-f" forward-word)
@@ -618,11 +621,15 @@
     ("b" (progn (when (not buffer-read-only)
                   (undo)
                   (setq buffer-undo-list x-hydra-buffer-undo-list))
-                (call-interactively 'switch-to-buffer)))
+                (call-interactively 'ivy-switch-buffer)))
     ("f" (progn (when (not buffer-read-only)
                   (undo)
                   (setq buffer-undo-list x-hydra-buffer-undo-list))
                 (call-interactively 'find-file)))
+    ("d" (progn (when (not buffer-read-only)
+                  (undo)
+                  (setq buffer-undo-list x-hydra-buffer-undo-list))
+                (call-interactively 'dired)))
     ("g" (progn (when (not buffer-read-only)
                   (undo)
                   (setq buffer-undo-list x-hydra-buffer-undo-list))
