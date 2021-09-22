@@ -2510,6 +2510,18 @@
                 '("sln"))
                "TcXaeShell"             ; Twincat shell
                '(file))
+         (list (openwith-make-extension-regexp
+                '("sldasm"))
+               "sldworks"               ; Solidworks assembly
+               '(file))
+         (list (openwith-make-extension-regexp
+                '("sldprt"))
+               "sldworks"               ; Solidworks part
+               '(file))
+         (list (openwith-make-extension-regexp
+                '("dxf"))
+               "sldworks"               ; Solidworks DXF
+               '(file))
          ))
   (openwith-mode 1)
   )
