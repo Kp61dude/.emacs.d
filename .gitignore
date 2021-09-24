@@ -13,7 +13,7 @@ forge-database.sqlite
 plugins/
 projectile-bookmarks.eld
 projectile.cache
-# recentf
+recentf
 server/
 snippets/
 transient/
