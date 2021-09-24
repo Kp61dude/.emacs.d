@@ -733,6 +733,7 @@
            ("C-c k" . counsel-ag)
            ("C-c r" . counsel-rg)
            ("C-x l" . counsel-locate)
+           ("M-'" . counsel-mark-ring)
            :map minibuffer-local-map
            ("C-r" . counsel-minibuffer-add)
            )
