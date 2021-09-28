@@ -2472,6 +2472,21 @@
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; srefactor
+(use-package srefactor
+  :ensure t
+  :config
+  (semantic-mode 1) ;; -> this is optional for Lisp
+  :bind (("M-RET o" . srefactor-lisp-one-line)
+         ("M-RET m" . srefactor-lisp-format-sexp)
+         ("M-RET d" . srefactor-lisp-format-defun)
+         ("M-RET b" . srefactor-lisp-format-buffer)
+         :map c-mode-map
+         ("M-RET" . srefactor-refactor-at-point)
+         :map c++-mode-map
+         ("M-RET" . srefactor-refactor-at-point))
+)
+
 ;;; smartparens
 (use-package smartparens
   :ensure t

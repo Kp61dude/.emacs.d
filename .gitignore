@@ -20,3 +20,4 @@ transient/
 var/
 flycheck_init.el
 custom.el
+/srecode-map.el
