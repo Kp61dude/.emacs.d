@@ -13,10 +13,11 @@ forge-database.sqlite
 plugins/
 projectile-bookmarks.eld
 projectile.cache
-# recentf
+recentf
 server/
 snippets/
 transient/
 var/
 flycheck_init.el
 custom.el
+semanticdb/
