@@ -21,3 +21,4 @@ var/
 flycheck_init.el
 custom.el
 semanticdb/
+/srecode-map.el
