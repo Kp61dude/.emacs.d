@@ -43,7 +43,7 @@
 
 ;; Specify the jupyter executable name, and the start dir of the server
 (defvar my:jupyter_location (executable-find "jupyter"))
-(defvar my:jupyter_start_dir "c:/Users/sapier/AppData/Roaming")
+(defvar my:jupyter_start_dir "c:/Users/EricSapier/AppData/Roaming")
 
 ;; In order to get EIN to work with byte-compiling we must explicitly
 ;; load some of the EIN files. Which files need to be loaded seems to change
@@ -2484,6 +2484,9 @@
 
 
 ;;; iec61131-mode
+  ;; manually edit iec61131-mode.el:
+  ;; (define-derived-mode
+  ;; iec61131-mode prog-mode ;fundamental-mode
 (if (not (file-directory-p "~/.emacs.d/plugins"))
     (make-directory "~/.emacs.d/plugins"))
 (if (not (file-exists-p "~/.emacs.d/plugins/iec61131-mode.el"))
