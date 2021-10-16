@@ -20,4 +20,8 @@ transient/
 var/
 flycheck_init.el
 custom.el
+<<<<<<< HEAD
 /network-security.data
+=======
+/srecode-map.el
+>>>>>>> 449776601311b4a764cf02adee322175e05c89b3

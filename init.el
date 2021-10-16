@@ -80,6 +80,7 @@
 ;; - xh starts hydra-dispatch
 ;; - xn starts hydra-move
 ;; - xx does save-buffer
+;; - xk does kill-buffer
 ;;
 ;; I've found that this leads to instability and causes Emacs to crash
 ;; fairly frequently, at least when run in daemon mode.
@@ -591,6 +592,7 @@
     ("p" (call-interactively #'hydra-projectile/body) "Projectile")
     ("s" (call-interactively #'hydra-string-inflection/body)
      "String inflection")
+    ("q" (call-interactively #'hydra-srefactor/body) "SRefactor")
     ("g" nil "cancel")
     )
 
@@ -653,6 +655,10 @@
                   (undo)
                   (setq buffer-undo-list x-hydra-buffer-undo-list))
                 (save-buffer)))
+    ("k" (progn (when (not buffer-read-only)
+                  (undo)
+                  (setq buffer-undo-list x-hydra-buffer-undo-list))
+                (kill-buffer)))
     ("3" (progn (when (not buffer-read-only)
                   (undo)
                   (setq buffer-undo-list x-hydra-buffer-undo-list))
@@ -1176,8 +1182,8 @@
   :ensure t
   :bind (("M-s" . avy-goto-word-1)
          ("M-c" . avy-goto-char-2)
-         ("C-'" . avy-goto-char)
-         ([remap goto-line] . avy-goto-line))
+         ("C-'" . avy-goto-char))
+         ;; ([remap goto-line] . avy-goto-line))
   ;; Set keys for Dvorak mode instead of qwerty
   :init
   (when my:use-dvorak-bindings
@@ -1898,6 +1904,7 @@
   :config
   (when my:use-ivy
     (setq magit-completing-read-function 'ivy-completing-read))
+  :hook (git-commit-mode . yas-minor-mode)
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2070,7 +2077,7 @@
   (add-hook 'prog-mode-hook #'yas-minor-mode)
   ;; Add snippet support to lsp mode
   (setq lsp-enable-snippet t)
-  (yas-global-mode t)
+  ;; (yas-global-mode t)
   )
 (use-package yasnippet-snippets
   :ensure t
@@ -2472,6 +2479,76 @@
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; change comment color for better viewing
+(set-face-foreground 'font-lock-comment-face "gray40") ; original doom-one is #5B6268
+
+
+;;; iec61131-mode
+(if (not (file-directory-p "~/.emacs.d/plugins"))
+    (make-directory "~/.emacs.d/plugins"))
+(if (not (file-exists-p "~/.emacs.d/plugins/iec61131-mode.el"))
+    (url-copy-file
+     "https://raw.githubusercontent.com/wadoon/st-mode/master/iec61131-mode.el"
+     "~/.emacs.d/plugins/iec61131-mode.el"))
+(when (file-exists-p "~/.emacs.d/plugins/iec61131-mode.el")
+  (use-package iec61131-mode
+    :mode ("\\.TcGVL\\'"
+           "\\.TcPOU\\'")
+    ;; :mode ("\\.Tc{3}*\\'") ; "\\.TcGVL\\'" "\\.TcDUT\\'" "\\.TcVIS\\'" "\\.TcGTLO'\\")
+    ;; :hook (prog-mode . iec61131-mode)
+    ;; :config
+    ;; (define-derived-mode iec61131-mode prog-mode "IEC61131-mode"
+    ;;   "Major mode for editing structured Text files.")
+    ;; (add-hook 'iec61131-mode-hook
+    ;;       (lambda () (run-hooks 'prog-mode-hook)))
+    )
+  )
+
+
+;;; srefactor
+(use-package srefactor
+  :ensure t
+  :hydra
+  (hydra-srefactor (:color teal :hint nil)
+                   ("o" srefactor-lisp-one-line "srefactor-lisp-one-line")
+                   ("m" srefactor-lisp-format-sexp "srefactor-lisp-format-sexp")
+                   ("d" srefactor-lisp-format-defun "srefactor-lisp-format-defun")
+                   ("b" srefactor-lisp-format-buffer "srefactor-lisp-format-buffer")
+                   ("e" srefactor-refactor-at-point "srefactor-refactor-at-point"))
+
+  ;; how to set your own map?
+  ;; (setq ycmd-command-map
+  ;;             (let ((map (make-sparse-keymap)))
+  ;;               (define-key map "b" 'ycmd-parse-buffer)
+  ;;               (define-key map "o" 'ycmd-open)
+  ;;               (define-key map "c" 'ycmd-close)
+  ;;               (define-key map "." 'ycmd-goto)
+  ;;               (define-key map "gi" 'ycmd-goto-include)
+  ;;               (define-key map "gd" 'ycmd-goto-definition)
+  ;;               (define-key map "gD" 'ycmd-goto-declaration)
+  ;;               (define-key map "gm" 'ycmd-goto-implementation)
+  ;;               (define-key map "gp" 'ycmd-goto-imprecise)
+  ;;               (define-key map "gr" 'ycmd-goto-references)
+  ;;               (define-key map "gt" 'ycmd-goto-type)
+  ;;               (define-key map "s" 'ycmd-toggle-force-semantic-completion)
+  ;;               (define-key map "v" 'ycmd-show-debug-info)
+  ;;               (define-key map "V" 'ycmd-version)
+  ;;               (define-key map "d" 'ycmd-show-documentation)
+  ;;               (define-key map "C" 'ycmd-clear-compilation-flag-cache)
+  ;;               (define-key map "O" 'ycmd-restart-semantic-server)
+  ;;               (define-key map "t" 'ycmd-get-type)
+  ;;               (define-key map "p" 'ycmd-get-parent)
+  ;;               (define-key map "f" 'ycmd-fixit)
+  ;;               (define-key map "r" 'ycmd-refactor-rename)
+  ;;               (define-key map "x" 'ycmd-completer)
+  ;;               map))
+
+  :config
+  ;; (setq srefactor-ui-menu-show-help nil) ;; hide the help message in the menu
+  (semantic-mode 1) ;; -> this is optional for Lisp
+  (define-key srefactor-ui-menu-mode-map (kbd "C-c q") 'srefactor-command-map)
+)
+
 ;;; smartparens
 (use-package smartparens
   :ensure t
@@ -2509,7 +2586,7 @@
                '(file))
          (list (openwith-make-extension-regexp
                 '("sln"))
-               "TcXaeShell"             ; Twincat shell
+               "devenv"             ; Twincat shell
                '(file))
          (list (openwith-make-extension-regexp
                 '("sldasm"))
@@ -2547,39 +2624,39 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load SQL (builtin)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package sql
-  ;; :defer 30
-  :init
-  (defalias 'sql-get-login 'ignore) ; suppress login as I only use one DB.
-  (add-to-list 'exec-path "C:/Program Files/MySQL/MySQL Server 5.7/bin/")
-  (setq sql-mysql-program "C:/Program Files/MySQL/MySQL Server 5.7/bin/MySQL.exe"
-        sql-mysql-options '("-C" "-f" "-t" "-n")
-        sql-user "root"
-        sql-password "root"
-        sql-database "systemscelldb"
-        sql-server "127.0.0.1")
-  (setq lsp-sqls-server "c:/Users/sapier/go/bin/sqls.exe")
-  (setq lsp-sqls-connections
-        '(((driver . "mysql") (dataSourceName . "root:root@tcp(127.0.0.1:3306)/systemscelldb"))))
-  (setq lsp-sqls-timeout 0.0)
+;; (use-package sql
+;;   ;; :defer 30
+;;   :init
+;;   (defalias 'sql-get-login 'ignore) ; suppress login as I only use one DB.
+;;   (add-to-list 'exec-path "C:/Program Files/MySQL/MySQL Server 5.7/bin/")
+;;   (setq sql-mysql-program "C:/Program Files/MySQL/MySQL Server 5.7/bin/MySQL.exe"
+;;         sql-mysql-options '("-C" "-f" "-t" "-n")
+;;         sql-user "root"
+;;         sql-password "root"
+;;         sql-database "systemscelldb"
+;;         sql-server "127.0.0.1")
+;;   (setq lsp-sqls-server "c:/Users/sapier/go/bin/sqls.exe")
+;;   (setq lsp-sqls-connections
+;;         '(((driver . "mysql") (dataSourceName . "root:root@tcp(127.0.0.1:3306)/systemscelldb"))))
+;;   (setq lsp-sqls-timeout 0.0)
 
-  (use-package sqlup-mode
-    :ensure t
-    :after(sql)
-    :config
-    (add-to-list 'sqlup-blacklist "name")
-    (add-to-list 'sqlup-blacklist "operation"))
+;;   (use-package sqlup-mode
+;;     :ensure t
+;;     :after(sql)
+;;     :config
+;;     (add-to-list 'sqlup-blacklist "name")
+;;     (add-to-list 'sqlup-blacklist "operation"))
 
-  (use-package sql-indent
-    :ensure t)
+;;   (use-package sql-indent
+;;     :ensure t)
 
-  :hook ((sql-interactive-mode . sqlup-mode)
-         (sql-interactive-mode . sqlind-minor-mode)
-         (sql-mode . sqlup-mode)
-         (sql-mode . lsp)
-         (sql-interactive-mode . yas-minor-mode))
-  :bind(:map sql-interactive-mode-map
-             ("C-M-a" . sql-beginning-of-statement)))
+;;   :hook ((sql-interactive-mode . sqlup-mode)
+;;          (sql-interactive-mode . sqlind-minor-mode)
+;;          (sql-mode . sqlup-mode)
+;;          (sql-mode . lsp)
+;;          (sql-interactive-mode . yas-minor-mode))
+;;   :bind(:map sql-interactive-mode-map
+;;              ("C-M-a" . sql-beginning-of-statement)))
 
 ;;; turn off line wrap globally
 (setq-default truncate-lines 1)
@@ -2603,8 +2680,8 @@
 ;; find more info here: https://github.com/magnars/expand-region.el
 ;; and watch emacsrocks episode 9 for a tutorial
 (use-package expand-region
-:ensure t
-:bind(("C-=" . er/expand-region)))
+  :ensure t
+  :bind(("C-=" . er/expand-region)))
 
 ;;; kill buffer immediately after key combo
 (global-set-key [(control x) (k)] 'kill-this-buffer)
@@ -2671,6 +2748,25 @@
               ;; ("C-e" . mwim-end-of-code-or-line) ; this is broken for some reason
               ))
 
+;; anchored-transpose (tweaked to my own liking and not
+;; copied directly from xenodium)
+(if (not (file-directory-p "~/.emacs.d/plugins"))
+    (make-directory "~/.emacs.d/plugins"))
+(if (not (file-exists-p "~/.emacs.d/plugins/anchored-transpose.el"))
+    (url-copy-file
+     "https://raw.githubusercontent.com/emacsmirror/anchored-transpose/master/anchored-transpose.el"
+     "~/.emacs.d/plugins/anchored-transpose.el"))
+(when (file-exists-p "~/.emacs.d/plugins/anchored-transpose.el")
+  (use-package anchored-transpose
+    :commands anchored-transpose
+    :init
+    ;; which used to be transpose-words
+    (global-unset-key (kbd "M-t"))
+    :bind
+    (("M-t r" . anchored-transpose)
+     ("M-t l" . transpose-lines)
+     ("M-t w" . transpose-words)))
+  )
 
 (provide '.emacs)
 ;;; .emacs ends here
