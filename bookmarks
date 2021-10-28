@@ -2,21 +2,16 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("Projects"
- (filename . "w:/Projects/")
- (front-context-string . "Org\n  drwxrwxrwx")
- (rear-context-string . "  0 08-08 21:28 ")
- (position . 268))
+(("GitHub"
+ (filename . "c:/Users/EricSapiens/Documents/GitHub/")
+ (front-context-string . "Software_Protect")
+ (rear-context-string . "096 10-28 12:18 ")
+ (position . 246))
 ("Notes"
- (filename . "w:/Notes/")
- (front-context-string . "Monday_sync.org\n")
- (rear-context-string . "203 08-16 10:22 ")
- (position . 266))
-("PLC_Projects"
- (filename . "w:/GitHub/")
+ (filename . "c:/Users/EricSapiens/Documents/Notes/")
  (front-context-string)
- (rear-context-string . "096 08-16 11:08 ")
- (position . 266))
+ (rear-context-string . "096 10-25 09:55 ")
+ (position . 244))
 ("init.el"
  (filename . "~/.emacs.d/init.el")
  (front-context-string)

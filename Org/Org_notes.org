@@ -1,0 +1,19 @@
+
+
+
+* Org manual
+  Org mode webpage
+  [[https://orgmode.org/][orgmode.org]]
+
+* Initial visibility
+  [[https://orgmode.org/manual/Initial-visibility.html][Initial visibility link]]
+  #+begin_src text
+    #+STARTUP: overview
+    #+STARTUP: content
+    #+STARTUP: showall
+    #+STARTUP: show2levels
+    #+STARTUP: show3levels
+    #+STARTUP: show4levels
+    #+STARTUP: show5levels
+    #+STARTUP: showeverything
+  #+end_src
