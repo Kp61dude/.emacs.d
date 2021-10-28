@@ -1714,15 +1714,15 @@
  :mode  ("\\.org\\'" . org-mode)
  :config
  (setq org-ellipsis "⤵"
-       org-list-allow-alphabetical t
-       yas-minor-mode t)
+       org-list-allow-alphabetical t)
  (add-to-list 'org-modules 'org-tempo)
  (use-package org-superstar
    :ensure t)
  :hook
  (org-mode . org-superstar-mode)
  (org-mode . turn-on-auto-fill)
- (org-mode . (lambda () (setq fill-column 80)))
+ (org-mode . (lambda () (setq fill-column 100)))
+ (org-mode . yas-minor-mode)
  :bind (("\C-cl" . org-store-link)
         :map org-mode-map
              ([remap org-cycle-agenda-files] . avy-goto-char)

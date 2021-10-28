@@ -21,3 +21,5 @@ var/
 flycheck_init.el
 custom.el
 /srecode-map.el
+/network-security.data
+/semanticdb/*
