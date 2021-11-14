@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: Eric Sapiens 2021-01-24
+# name: Go_Home
+# key: home
+# --
+G28

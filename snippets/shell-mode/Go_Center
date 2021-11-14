@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contrubutor: Eric Sapiens 2021-01-24
+# name: Go_Center
+# key: center
+# --
+G1 X0 Y0 Z5 F5000$0

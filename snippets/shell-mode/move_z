@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: Eric Sapiens 2021-01-24
+# name: drop_z
+# key: mz
+# --
+G1 Z$1 F500$0

@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: Eric Sapiens 2021-01-24
+# name: z_tower
+# key: zt
+# --
+G1 X0 Y80 Z2 F5000$0

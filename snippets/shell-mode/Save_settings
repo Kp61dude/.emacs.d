@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contrubutor: Eric Sapiens 2021-01-24
+# name: Save_Settings
+# key: save
+# --
+M500
