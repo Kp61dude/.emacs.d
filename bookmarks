@@ -2,7 +2,12 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("GitHub"
+(("ICON_notes.org"
+ (filename . "c:/Users/EricSapiens/Documents/Notes/Tc3/Commissioning/2.5.X/ICON_notes.org")
+ (front-context-string . "#+STARTUP: overv")
+ (rear-context-string)
+ (position . 1))
+("GitHub"
  (filename . "c:/Users/EricSapiens/Documents/GitHub/")
  (front-context-string . "Software_Protect")
  (rear-context-string . "096 10-28 12:18 ")

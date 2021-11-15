@@ -276,7 +276,9 @@
 
 ;; Auto-wrap at 80 characters
 (setq-default auto-fill-function 'do-auto-fill)
-(setq-default fill-column 80)
+;; local variable
+(setq miFillColumn 110)
+(setq-default fill-column miFillColumn)
 (turn-on-auto-fill)
 ;; Disable auto-fill-mode in programming mode
 (add-hook 'prog-mode-hook (lambda () (auto-fill-mode -1)))
@@ -739,7 +741,7 @@
            ("C-c k" . counsel-ag)
            ("C-c r" . counsel-rg)
            ("C-x l" . counsel-locate)
-           ("M-'" . counsel-mark-ring)
+           ("C-c '" . counsel-mark-ring)
            :map minibuffer-local-map
            ("C-r" . counsel-minibuffer-add)
            )
@@ -1181,7 +1183,7 @@
 (use-package avy
   :ensure t
   :bind (("M-s" . avy-goto-word-1)
-         ("M-c" . avy-goto-char-2)
+         ("C-M-c" . avy-goto-char-2)
          ("C-'" . avy-goto-char))
          ;; ([remap goto-line] . avy-goto-line))
   ;; Set keys for Dvorak mode instead of qwerty
@@ -1335,7 +1337,7 @@
 (setq c-basic-offset 2)
 ;; Set the size that a tab CHARACTER is interpreted as
 ;; (unnecessary if there are no tab characters in the file!)
-(setq tab-width 2)
+(setq tab-width 4)
 
 ;; We want to be able to see if there is a tab character vs a space.
 ;; global-whitespace-mode allows us to do just that.
@@ -1350,6 +1352,7 @@
       (declare-function global-whitespace-mode "whitespace.el"))
   :config
   (setq whitespace-style '(face lines-tail trailing tabs tab-mark))
+  (setq-default whitespace-line-column miFillColumn)
   )
 
 ;; Turn on whitespace mode globally except in magit-mode
@@ -1711,24 +1714,41 @@
   )
 
 (use-package org
- :mode  ("\\.org\\'" . org-mode)
- :config
- (setq org-ellipsis "⤵"
-       org-list-allow-alphabetical t)
- (add-to-list 'org-modules 'org-tempo)
- (use-package org-superstar
-   :ensure t)
- :hook
- (org-mode . org-superstar-mode)
- (org-mode . turn-on-auto-fill)
- (org-mode . (lambda () (setq fill-column 100)))
- (org-mode . yas-minor-mode)
- :bind (("\C-cl" . org-store-link)
-        :map org-mode-map
-             ([remap org-cycle-agenda-files] . avy-goto-char)
-             ("\C-ca" . org-agenda)
-             ("C-c C-x l" . org-todo-list)
-             ("C-=" . er/mark-word)))
+  :mode  ("\\.org\\'" . org-mode)
+  :config
+  (defun org-show-current-heading-tidily ()
+    "Show next entry, keeping other entries closed."
+    (interactive)
+    (if (save-excursion (end-of-line) (outline-invisible-p))
+        (progn (org-show-entry) (show-children))
+      (outline-back-to-heading)
+      (unless (and (bolp) (org-on-heading-p))
+        (org-up-heading-safe)
+        (hide-subtree)
+        (error "Boundary reached"))
+      (org-overview)
+      (org-reveal t)
+      (org-show-entry)
+      (show-children)))
+  (setq org-ellipsis "⤵"
+        org-list-allow-alphabetical t)
+  (add-to-list 'org-modules 'org-tempo)
+  (use-package org-superstar
+    :ensure t)
+  :hook
+  (org-mode . org-superstar-mode)
+  (org-mode . turn-on-auto-fill)
+  (org-mode . (lambda () (setq fill-column 100)))
+  (org-mode . yas-minor-mode)
+  (org-mode . display-fill-column-indicator-mode)
+  (org-mode . whitespace-mode)
+  :bind (("\C-cl" . org-store-link)
+         :map org-mode-map
+         ([remap org-cycle-agenda-files] . avy-goto-char)
+         ("\C-ca" . org-agenda)
+         ("C-c C-x l" . org-todo-list)
+         ("C-=" . er/mark-word)
+         ([remap org-ctrl-c-tab] . org-show-current-heading-tidily)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1953,10 +1973,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; gitignore-mode: highlighting in gitignore files
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package gitignore-mode
-  :ensure t
+(if (not (file-directory-p "~/.emacs.d/plugins"))
+    (make-directory "~/.emacs.d/plugins"))
+(if (not (file-exists-p "~/.emacs.d/plugins/gitignore-mode.el"))
+    (url-copy-file
+     "https://raw.githubusercontent.com/magit/git-modes/master/gitignore-mode.el"
+     "~/.emacs.d/plugins/gitignore-mode.el"))
+(when (file-exists-p "~/.emacs.d/plugins/gitignore-mode.el")
+  (use-package gitignore-mode
   :diminish gitignore-mode
   :mode ("\\.gitignore\\'"))
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; cmake-mode
@@ -2478,6 +2505,14 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(use-package csharp-mode
+  :ensure t
+  :mode ("\\.cs\\'")
+  :config
+  (setq tab-width 4)
+  )
+
 
 ;;; change comment color for better viewing
 (set-face-foreground 'font-lock-comment-face "gray40") ; original doom-one is #5B6268
