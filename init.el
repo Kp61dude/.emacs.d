@@ -2630,7 +2630,7 @@
                '(file))
          (list (openwith-make-extension-regexp
                 '("sln"))
-               "devenv"             ; Twincat shell
+               "TcXaeShell"             ; Twincat shell
                '(file))
          (list (openwith-make-extension-regexp
                 '("sldasm"))
