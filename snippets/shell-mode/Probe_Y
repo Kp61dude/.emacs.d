@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: Eric Sapiens 2021-01-24
+# name: Probe_Y
+# key: py
+# --
+G30 X50.23 Y-28.99

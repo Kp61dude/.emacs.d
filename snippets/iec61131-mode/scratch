@@ -1,0 +1,82 @@
+("wl" "System.Console.WriteLine(${1://thing to write})
+" "WriteLine (...)" nil)
+                   ("prop" "   Private _${1:Name} as ${2:Type}
+   Public Property ${1:Name}() As ${2:Type}
+
+      Get
+         Return m${1:Name}
+      End Get
+
+      Set(ByVal value As ${2:Type})
+            m${1:Name} = value
+      End Set
+
+   End Property ' ${1:Name}
+
+" "Property ... { ... }" nil)
+                   ("ife" "If ${1:predicate} Then
+  ${2:// then clause}
+Else
+  ${3:// else clause}
+End If" "If ... Then  ... Else  ... End If" nil)
+                   ("if" "If ${1:predicate} Then
+  ${2:// then clause}
+End If
+" "If ... Then  ... End If" nil)
+                   ("fore" "Dim ${1:var} As ${2:type}
+For Each $1 In ${3:IEnumerable}
+    ${4:'' body...}
+Next
+
+" "For Each ... Next" nil)
+                   ("for" "For ${1:index} As Integer = 0 To ${2:finish}
+    ${3:''body}
+Next $1
+
+" "for (...) { ... }" nil)
+                   ("args" "        Dim i As Integer
+        For i = 0 To args.Length - 1
+            Select Case(args(i))
+                Case \"-b\":
+                    If (_boolValue = True) Then
+                        Throw New ArgumentException(args(i))
+                    End If
+                    _boolValue = True
+
+                Case \"-s\":
+                    i += 1
+                    If (args.Length <= i) Then
+                        Throw New ArgumentException(args(i))
+                    End If
+                    If Not (Me._stringValue Is Nothing) Then
+                        Throw New ArgumentException(args((i - 1)))
+                    End If
+                    _stringValue = args(i)
+
+                Case \"-n\":
+                    i += 1
+                    If (args.Length <= i) Then
+                        Throw New ArgumentException(args(i))
+                    End If
+                    If (Me._intValue <> 0) Then
+                        Throw New ArgumentException(args((i - 1)))
+                    End If
+                    If args(i).StartsWith(\"0x\") Then
+                        Me._intValue = Integer.Parse(args(i).Substring(2), NumberStyles.AllowHexSpecifier)
+                    Else
+                        Me._intValue = Integer.Parse(args(i))
+                    End If
+
+                case \"-?\":
+                    Throw New ArgumentException(args(i))
+
+                Case Else:
+                    Throw New ArgumentException(args(i))
+
+            End Select
+        Next i
+        If (Me._intValue = 0) Then
+            Me._intValue = Me.DefaultIntValue
+        End If
+
+" "Select Case(args(i) ..." nil) 

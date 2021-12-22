@@ -2506,12 +2506,26 @@
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Clip current file to clipboard
+;; https://stackoverflow.com/questions/18812938/copy-full-file-path-into-copy-paste-clipboard
+(defun clip-file ()
+  "Put the current file name on the clipboard"
+  (interactive)
+  (let ((filename (if (equal major-mode 'dired-mode)
+                      (file-name-directory default-directory)
+                    (buffer-file-name))))
+    (when filename
+      (x-select-text filename))))
+
+
+;; mode for powershell
 (use-package powershell
   :ensure t
   :mode ("\\.ps1\\'" . powershell-mode)
   )
 
 
+;; mode for C#
 (use-package csharp-mode
   :ensure t
   :mode ("\\.cs\\'")
@@ -2537,8 +2551,10 @@
 (when (file-exists-p "~/.emacs.d/plugins/iec61131-mode.el")
   (use-package iec61131-mode
     :mode ("\\.TcGVL\\'"
-           "\\.TcPOU\\'")
-    ;; :mode ("\\.Tc{3}*\\'") ; "\\.TcGVL\\'" "\\.TcDUT\\'" "\\.TcVIS\\'" "\\.TcGTLO'\\")
+           "\\.TcPOU\\'"
+           "\\.TcDUT\\'")
+    :hook
+    (iec61131-mode .  (lambda () (setq tab-width 4)))
     ;; :hook (prog-mode . iec61131-mode)
     ;; :config
     ;; (define-derived-mode iec61131-mode prog-mode "IEC61131-mode"
@@ -2764,7 +2780,8 @@
   :hook
   (dired-mode . dired-hide-details-mode)
   :bind (([remap list-directory] . dired)
-         ([remap dired] . dired-other-window))
+         ([remap dired] . dired-other-window)
+         ([remap dired-prev-subdir] . ace-swap-window))
   :bind (:map dired-mode-map
               ("RET" . dired-find-alternate-file) ; prevents opening multiple dired
               ("^" . (lambda () (interactive) (find-alternate-file "..")))))

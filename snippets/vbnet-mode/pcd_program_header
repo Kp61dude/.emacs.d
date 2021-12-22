@@ -1,0 +1,26 @@
+# -*- mode: snippet -*-
+# name: pcd_program_header
+# key: pcd_hdr
+# contributor : Eric Sapiens <eric.sapiens@ga-asi.com>
+# --
+'Creator: $1
+'Create Date: `(format-time-string "%m-%d-%Y")`
+'Description: $0
+
+Sub Main()
+Dim PCDApp, PCDPartProgram, PCDCommands, PCDCommand, retval
+Dim objFile, objFolder As Object
+
+Set PCDApp = CreateObject("PCDLRN.Application.10.1")
+Set PCDPartProgram = PCDApp.ActivePartProgram
+Set PCDCommands = PCDPartProgram.Commands
+
+
+
+
+
+Set PCDApp = Nothing
+Set PCDPartProgram = Nothing
+Set PCDCommands = Nothing
+Set Pathname = Nothing
+End Sub

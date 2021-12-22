@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: new_part_entry
+# key: npe
+# --
+*** $1
+    Programming: $2, $3
+    Programs: [[q:/CMM Programs/POD/_Programs/$4][Pcd Directory]$5
+    Drawing: [[q:/CMM Programs/POD/iX_Projects/$6][iX directory]$7
+    Part Name: $0

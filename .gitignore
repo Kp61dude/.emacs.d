@@ -15,11 +15,13 @@ projectile-bookmarks.eld
 projectile.cache
 recentf
 server/
-snippets/
+snippets/**/*~
 transient/
 var/
 flycheck_init.el
 custom.el
+/network-security.data
 /srecode-map.el
 /network-security.data
 /semanticdb/*
+/eshell/

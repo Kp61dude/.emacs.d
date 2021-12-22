@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: Eric Sapiens 2021-01-24
+# name: x_tower
+# key: xt
+# --
+G1 X-69.2820323027550917411 Y-40 Z2 F5000$0

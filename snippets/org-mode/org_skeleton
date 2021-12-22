@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# contributor: Eric Sapiens 02-21-2021
+# name: org_skeleton
+# key: org_skeleton
+# --
+#+STARTUP: hidestars logdone
+#+TODO: NEXT(n!) INCOMPLETE(i!) TODO(t!) CANCEL(c@!) DONE(d!)
+#+EXPORT_SELECT_TAGS: export
+# #+OPTIONS: ^init
+# #+OPTIONS: toc:nil
+# #+OPTIONS: tex:t'
+# #+OPTIONS: num:nil
