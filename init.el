@@ -2506,6 +2506,24 @@
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;; count-words-region
+(use-package simple
+  :bind ("C-M-=" . count-words-region))
+
+
+;;; lin mode
+;; https://raw.githubusercontent.com/protesilaos/lin/main/lin.el
+;; https://protesilaos.com/codelog/2022-01-08-emacs-face-remap-add-relative/
+(if (not (file-directory-p "~/.emacs.d/plugins"))
+    (make-directory "~/.emacs.d/plugins"))
+(if (not (file-exists-p "~/.emacs.d/plugins/lin.el"))
+    (url-copy-file
+     "https://raw.githubusercontent.com/protesilaos/lin/main/lin.el"
+     "~/.emacs.d/plugins/lin.el"))
+(when (file-exists-p "~/.emacs.d/plugins/lin.el")
+  (use-package lin))
+
+
 ;; Clip current file to clipboard
 ;; https://stackoverflow.com/questions/18812938/copy-full-file-path-into-copy-paste-clipboard
 (defun clip-file ()
@@ -2536,6 +2554,8 @@
 
 ;;; change comment color for better viewing
 (set-face-foreground 'font-lock-comment-face "gray40") ; original doom-one is #5B6268
+;;; change string color
+;; (set-face-foreground 'font-lock-string-face "red") ; not used
 
 
 ;;; iec61131-mode
@@ -2555,12 +2575,20 @@
            "\\.TcDUT\\'")
     :hook
     (iec61131-mode .  (lambda () (setq tab-width 4)))
-    ;; :hook (prog-mode . iec61131-mode)
-    ;; :config
-    ;; (define-derived-mode iec61131-mode prog-mode "IEC61131-mode"
-    ;;   "Major mode for editing structured Text files.")
-    ;; (add-hook 'iec61131-mode-hook
-    ;;       (lambda () (run-hooks 'prog-mode-hook)))
+    (iec61131-mode . my-comment-remap-mode)
+
+    :config
+    (defvar-local my-comment-remap-cookie nil
+      "Cookie of the last 'face-remap-add-relative'.")
+
+    (define-minor-mode my-comment-remap-mode
+      "Remap the face of comments."
+      :local t
+      :init-value nil
+      (if my-comment-remap-mode
+          (setq my-comment-remap-cookie
+                (face-remap-add-relative 'font-lock-comment-face 'font-lock-string-face))
+        (face-remap-remove-relative my-comment-remap-cookie)))
     )
   )
 
