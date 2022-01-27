@@ -1,6 +1,7 @@
 
 
 
+
 * Org manual
   Org mode webpage
   [[https://orgmode.org/][orgmode.org]]
@@ -17,3 +18,18 @@
     #+STARTUP: show5levels
     #+STARTUP: showeverything
   #+end_src
+
+* Advanced Export Configuration eg. Ignore specific headings
+  [[https://orgmode.org/manual/Advanced-Export-Configuration.html][Advanced Export Configuration]]
+
+  [[https://stackoverflow.com/questions/10295177/is-there-an-equivalent-of-org-modes-b-ignoreheading-for-non-beamer-documents][stackoverflow example post]]
+#+begin_src elisp
+  (defun sa-ignore-headline (contents backend info)
+    "Ignore headlines with tag `ignoreheading'."
+    (when (and (org-export-derived-backend-p backend 'latex 'html 'ascii)
+               (string-match "\\`.*ignoreheading.*\n"
+                             (downcase contents)))
+      (replace-match "" nil nil contents)))
+
+  (add-to-list 'org-export-filter-headline-functions 'sa-ignore-headline)
+#+end_src
