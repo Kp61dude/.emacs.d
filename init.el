@@ -1730,6 +1730,17 @@
       (org-reveal t)
       (org-show-entry)
       (show-children)))
+  ;; backend aware export preprocess hook
+  ;; https://github.com/suvayu/.emacs.d/blob/master/org-mode-config.el#L234
+  (defun sa-ignore-headline (contents backend info)
+    "Ignore headlines with tag `ignoreheading'."
+    (when (and (org-export-derived-backend-p backend 'latex 'html 'ascii)
+               (string-match "\\`.*ignoreheading.*\n"
+                             (downcase contents)))
+      (replace-match "" nil nil contents)))
+
+  (add-to-list 'org-export-filter-headline-functions 'sa-ignore-headline)
+
   (setq org-ellipsis "⤵"
         org-list-allow-alphabetical t)
   (add-to-list 'org-modules 'org-tempo)
