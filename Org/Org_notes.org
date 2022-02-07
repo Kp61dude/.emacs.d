@@ -5,6 +5,19 @@
   Org mode webpage
   [[https://orgmode.org/][orgmode.org]]
 
+** favorites
+*** promote heading by one level
+    M-RIGHT (org-do-demote)
+    https://orgmode.org/manual/Structure-Editing.html
+
+*** heading visibility
+    C-x n s (org-narrow-to-subtree)
+    https://orgmode.org/manual/Structure-Editing.html
+
+*** convert current line to heading
+    C-c * (org-toggle-heading)
+    https://orgmode.org/manual/Structure-Editing.html
+
 * Initial visibility
   [[https://orgmode.org/manual/Initial-visibility.html][Initial visibility link]]
   #+begin_src text
