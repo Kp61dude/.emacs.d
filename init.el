@@ -1715,6 +1715,13 @@
 
 (use-package org
   :mode  ("\\.org\\'" . org-mode)
+  :init
+  (defun sa-ignore-headline (contents backend info)
+    "Ignore headlines with tag `ignoreheading'."
+    (when (and (org-export-derived-backend-p backend 'latex 'html 'ascii)
+               (string-match "\\`.*ignoreheading.*\n"
+                             (downcase contents)))
+      (replace-match "" nil nil contents)))
   :config
   (defun org-show-current-heading-tidily ()
     "Show next entry, keeping other entries closed."
@@ -1732,12 +1739,6 @@
       (show-children)))
   ;; backend aware export preprocess hook
   ;; https://github.com/suvayu/.emacs.d/blob/master/org-mode-config.el#L234
-  (defun sa-ignore-headline (contents backend info)
-    "Ignore headlines with tag `ignoreheading'."
-    (when (and (org-export-derived-backend-p backend 'latex 'html 'ascii)
-               (string-match "\\`.*ignoreheading.*\n"
-                             (downcase contents)))
-      (replace-match "" nil nil contents)))
 
   (add-to-list 'org-export-filter-headline-functions 'sa-ignore-headline)
 
@@ -2517,6 +2518,60 @@
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; Extend eshell: Completion
+;; https://timmydouglas.com/2020/12/18/eshell-complete.html
+(defun pcmpl-git-commands ()
+  "Return the most common git commands by parsing the git output."
+  (with-temp-buffer
+    (call-process-shell-command "git" nil (current-buffer) nil "help" "--all")
+    (goto-char 0)
+    (search-forward "Main Porcelain Commands")
+    (let (commands)
+      (while (re-search-forward
+              "^[[:blank:]]+\\([[:word:]-.]+\\)[[:blank:]]*\\([[:word:]-.]+\\)?"
+              nil t)
+        (push (match-string 1) commands)
+        (when (match-string 2)
+          (push (match-string 2) commands)))
+      (sort commands #'string<))))
+
+(defconst pcmpl-git-commands (pcmpl-git-commands)
+  "List of `git' commands.")
+
+(defvar pcmpl-git-ref-list-cmd "git for-each-ref refs/ --format='%(refname)'"
+  "The `git' command to run to get a list of refs.")
+
+(defun pcmpl-git-get-refs (type)
+  "Return a list of `git' refs filtered by TYPE."
+  (with-temp-buffer
+    (insert (shell-command-to-string pcmpl-git-ref-list-cmd))
+    (goto-char (point-min))
+    (let (refs)
+      (while (re-search-forward (concat "^refs/" type "/\\(.+\\)$") nil t)
+        (push (match-string 1) refs))
+      (nreverse refs))))
+
+(defun pcmpl-git-remotes ()
+  "Return a list of remote repositories."
+  (split-string (shell-command-to-string "git remote")))
+
+(defun pcomplete/git ()
+  "Completion for `git'."
+  ;; Completion for the command argument.
+  (pcomplete-here* pcmpl-git-commands)
+  (cond
+   ((pcomplete-match "help" 1)
+    (pcomplete-here* pcmpl-git-commands))
+   ((pcomplete-match (regexp-opt '("pull" "push")) 1)
+    (pcomplete-here (pcmpl-git-remotes)))
+   ;; provide branch completion for the command `checkout'.
+   ((pcomplete-match "checkout" 1)
+    (pcomplete-here* (append (pcmpl-git-get-refs "heads")
+                             (pcmpl-git-get-refs "tags"))))
+   (t
+    (while (pcomplete-here (pcomplete-entries))))))
+
+
 ;;; count-words-region
 (use-package simple
   :bind ("C-M-=" . count-words-region))
@@ -2591,6 +2646,9 @@
     :config
     (defvar-local my-comment-remap-cookie nil
       "Cookie of the last 'face-remap-add-relative'.")
+
+    ;; open large .tsproj files in text-mode
+    (add-to-list 'auto-mode-alist '("\\.tsproj\\'" . text-mode))
 
     (define-minor-mode my-comment-remap-mode
       "Remap the face of comments."
@@ -2867,6 +2925,7 @@
      ("M-t l" . transpose-lines)
      ("M-t w" . transpose-words)))
   )
+
 
 (provide '.emacs)
 ;;; .emacs ends here
