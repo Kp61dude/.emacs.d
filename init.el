@@ -66,7 +66,7 @@
 ;; - spacemacs-dark
 ;; - sourcerer
 ;; - doom-* (the doom themes https://github.com/hlissner/emacs-doom-themes)
-(defvar my:use-theme 'nil)
+(defvar my:use-theme 'doom-one-light)
 
 ;; Set my:use-dvorak-bindings to t if you use a Dvorak keyboard layout
 (defvar my:use-dvorak-bindings nil)
@@ -135,16 +135,17 @@
 ;; highlighting to read.
 (defun my:set-custom-faces()
   "Set custom faces after the theme is loaded."
-  ;; (custom-set-faces
-  ;;  '(ivy-current-match
-  ;;    ((t (:background nil :underline t))))
-  ;;  '(company-tooltip
-  ;;    ((t (:background nil))))
-  ;;  '(company-tooltip-selection
-  ;;    ((t (:background nil :underline t))))
-  ;;  '(highlight
-  ;;    ((t (:background "nil" :foreground "nil" :underline t))))
-  ;;  )
+  (custom-set-faces
+   '(ivy-current-match
+     ((t (:background nil :underline t))))
+   '(company-tooltip
+     ((t (:background nil))))
+   '(company-tooltip-selection
+     ((t (:background nil :underline t))))
+   '(highlight
+     ((t (:underline t))))
+     ;((t (:background "nil" :foreground "nil" :underline t))))
+   )
 
   ;; Customize powerline colors. I like purple pink-ish
   (custom-set-faces
@@ -2160,6 +2161,91 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(when (string-equal my:use-theme "darcula")
+  (use-package jetbrains-darcula-theme
+    :ensure t
+    :config
+    (load-theme 'jetbrains-darcula t)))
+
+(when (string-match "doom-*" (symbol-name my:use-theme))
+  (use-package doom-themes
+    :ensure t
+    :config
+    ;; Global settings (defaults)
+
+    ;; if nil, bold is universally disabled
+    (setq doom-themes-enable-bold t)
+    ;; if nil, italics is universally disabled
+    (setq doom-themes-enable-italic t)
+    ;; Load the selected theme
+    (load-theme my:use-theme t)
+
+    (require 'doom-themes-ext-org)
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config)
+    )
+  )
+
+(when (string-equal my:use-theme "spacemacs-dark")
+  (use-package spacemacs-common
+    :ensure spacemacs-theme
+    :config (load-theme 'spacemacs-dark t)))
+
+(when (string-equal my:use-theme "sourcerer")
+  (use-package sourcerer-theme
+    :ensure t
+    :config
+    (load-theme 'sourcerer t))
+
+  (set-face-background 'hl-line "#372E2D")
+  ;; The minibuffer default colors with my theme are impossible to read,
+  ;; so change them to something better using ivy-minibuffer-match-face.
+
+  (custom-set-faces
+   ;; custom-set-faces was added by Custom.
+   ;; If you edit it by hand, you could mess it up, so be careful.
+   ;; Your init file should contain only one such instance.
+   ;; If there is more than one, they won't work right.
+   '(default
+      ((((type tty) (background dark)) (:background "nil"))))
+   '(company-preview
+     ((t (:background "#073642" :foreground "#2aa198"))))
+   '(company-preview-common
+     ((t (:foreground "#93a1a1" :underline t))))
+   '(company-scrollbar-bg
+     ((t (:background "#073642" :foreground "#2aa198"))))
+   '(company-scrollbar-fg
+     ((t (:foreground "#002b36" :background "#839496"))))
+   '(company-template-field
+     ((t (:background "#7B6000" :foreground "#073642"))))
+   '(company-tooltip
+     ((t (:background "light green" :foreground "DeepSkyBlue1"))))
+   '(company-tooltip-annotation
+     ((t (:foreground "#93a1a1" :background "#073642"))))
+   '(company-tooltip-common
+     ((t (:foreground "#93a1a1" :underline t))))
+   '(company-tooltip-common-selection
+     ((t (:foreground "#93a1a1" :underline t))))
+   '(company-tooltip-mouse
+     ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
+   '(company-tooltip-selection
+     ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
+   '(header-line
+     ((t (:background "#003366")))))
+  (when my:use-ivy
+    (custom-set-faces
+     '(ivy-minibuffer-match-face-1
+       ((((class color) (background light)) (:background "#555555"))
+        (((class color) (background dark)) (:background "#555555"))))
+     '(ivy-minibuffer-match-face-2
+       ((t (:background "#314f30" :weight bold))))
+     '(ivy-minibuffer-match-face-3
+       ((t (:background "#48225b" :weight bold))))
+     '(ivy-minibuffer-match-face-4
+       ((t (:background "#680a0a" :weight bold))))
+     '(which-func ((t (:foreground "#8fb28f"))))))
+)
 
 ;; I don't care to see the splash screen
 (setq inhibit-splash-screen t)
