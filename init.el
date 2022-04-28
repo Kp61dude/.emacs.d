@@ -150,9 +150,9 @@
   ;; Customize powerline colors. I like purple pink-ish
   (custom-set-faces
    '(powerline-active1
-     ((t (:background "white" :foreground "#9e51b5" :bold t :underline t)))) ;; was #c678dd
+     ((t (:background "light goldenrod" :foreground "back" :bold t :underline t)))) ;; was #c678dd and #9e51b5
    '(powerline-active2
-     ((t (:background "white" :foreground "#9e51b5" :bold t :underline t)))) ;; was #c678dd
+     ((t (:background "indian red" :foreground "black" :bold t :underline t)))) ;; was #c678dd and #9e51b5
    )
 
   (set-face-attribute 'powerline-inactive1 nil :background
@@ -167,12 +167,12 @@
   ;; Custom face for avy
   (custom-set-faces
    '(avy-lead-face
-     ((t (:foreground "white" :background "#9e51b5" :bold t :underline t))))) ;; was #c678dd
+     ((t (:foreground "peru" :background "blue" :bold t :underline t))))) ;; was #c678dd and #9e51b5
 
   ;; Make the background pure white because I find that easier to read
   (custom-set-faces
    '(default
-      ((t (:background "white")))))
+      ((t (:background "beige")))))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2210,9 +2210,9 @@
    '(default
       ((((type tty) (background dark)) (:background "nil"))))
    '(company-preview
-     ((t (:background "#073642" :foreground "#2aa198"))))
+     ((t (:background "plum" :foreground "LightSalmon1")))) ; was #2aa198 and Lightyellow
    '(company-preview-common
-     ((t (:foreground "#93a1a1" :underline t))))
+     ((t (:foreground "Deep pink" :underline t)))) ; was #93a1a1
    '(company-scrollbar-bg
      ((t (:background "#073642" :foreground "#2aa198"))))
    '(company-scrollbar-fg
@@ -2220,23 +2220,23 @@
    '(company-template-field
      ((t (:background "#7B6000" :foreground "#073642"))))
    '(company-tooltip
-     ((t (:background "light green" :foreground "DeepSkyBlue1"))))
+     ((t (:background "white" :foreground "DeepSkyBlue1")))) ; was light green
    '(company-tooltip-annotation
-     ((t (:foreground "#93a1a1" :background "#073642"))))
+     ((t (:foreground "hot pink" :background "#073642")))); was #93a1a1
    '(company-tooltip-common
-     ((t (:foreground "#93a1a1" :underline t))))
+     ((t (:foreground "blue" :underline t)))) ; was #93a1a1
    '(company-tooltip-common-selection
-     ((t (:foreground "#93a1a1" :underline t))))
+     ((t (:foreground "blue" :underline t)))) ; was #93a1a1
    '(company-tooltip-mouse
      ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
    '(company-tooltip-selection
-     ((t (:background "DodgerBlue4" :foreground "CadetBlue1"))))
+     ((t (:background "gray" :foreground "black")))) ; selected item ; was DodgerBlue4 and CadetBlue1
    '(header-line
-     ((t (:background "#003366")))))
+     ((t (:background "light goldenrod"))))) ; top bar (current file name/path) ; was #003366
   (when my:use-ivy
     (custom-set-faces
      '(ivy-minibuffer-match-face-1
-       ((((class color) (background light)) (:background "#555555"))
+       ((((class color) (background light)) (:background "Lightyellow2")) ; was #555555
         (((class color) (background dark)) (:background "#555555"))))
      '(ivy-minibuffer-match-face-2
        ((t (:background "#314f30" :weight bold))))
@@ -2298,7 +2298,7 @@
                (window-body-width))
             (progn
               (concat (with-face sl/drop-str
-                                 :background "blue"
+                                 :background "black"
                                  :weight 'bold
                                  )
                       (with-face (substring sl/header
@@ -2319,7 +2319,7 @@
                              ;; :background "green"
                              ;; :foreground "black"
                              :weight 'bold
-                             :foreground "#8fb28f"
+                             :foreground "blue" ; was #8fb28f
                              )
                 (with-face sl/header
                            ;; :background "green"
@@ -2338,7 +2338,7 @@
   ;; However, in the terminal it's quite nice
   (if window-system
       (custom-set-faces
-       '(which-func ((t (:foreground "#8fb28f")))))
+       '(which-func ((t (:foreground "blue"))))) ; was #8fb28f
     (custom-set-faces
      '(which-func ((t (:foreground "blue"))))))
   ;; Set the header line
@@ -2579,7 +2579,7 @@
 
 
 ;;; change comment color for better viewing
-(set-face-foreground 'font-lock-comment-face "forest green") ; original doom-one is #5B6268
+(set-face-foreground 'font-lock-comment-face "seashell4") ; original doom-one is #5B6268
 ;;; change string color
 ;; (set-face-foreground 'font-lock-string-face "red") ; not used
 
