@@ -1714,16 +1714,17 @@
       (org-reveal t)
       (org-show-entry)
       (show-children)))
-  ;; backend aware export preprocess hook
-  ;; https://github.com/suvayu/.emacs.d/blob/master/org-mode-config.el#L234
-
-  (add-to-list 'org-export-filter-headline-functions 'sa-ignore-headline)
 
   (setq org-ellipsis "⤵"
         org-list-allow-alphabetical t)
   (add-to-list 'org-modules 'org-tempo)
   (use-package org-superstar
     :ensure t)
+
+  ;; backend aware export preprocess hook
+  ;; https://github.com/suvayu/.emacs.d/blob/master/org-mode-config.el#L234
+  ;(add-to-list 'org-export-filter-headline-functions 'sa-ignore-headline)
+
   :hook
   (org-mode . org-superstar-mode)
   (org-mode . turn-on-auto-fill)
@@ -2579,7 +2580,7 @@
 
 
 ;;; change comment color for better viewing
-(set-face-foreground 'font-lock-comment-face "seashell4") ; original doom-one is #5B6268
+(set-face-foreground 'font-lock-comment-face "dark slate gray") ; original doom-one is #5B6268
 ;;; change string color
 ;; (set-face-foreground 'font-lock-string-face "red") ; not used
 
