@@ -1182,7 +1182,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package avy
   :ensure t
-  :bind (("M-s" . avy-goto-word-1)
+  :bind (("C-M-s" . avy-goto-word-1)
          ("C-M-c" . avy-goto-char-2)
          ("C-'" . avy-goto-char))
          ;; ([remap goto-line] . avy-goto-line))
@@ -1740,7 +1740,7 @@
   ;; backend aware export preprocess hook
   ;; https://github.com/suvayu/.emacs.d/blob/master/org-mode-config.el#L234
 
-  (add-to-list 'org-export-filter-headline-functions 'sa-ignore-headline)
+  ;; (add-to-list 'org-export-before-parsing-hook #'sa-ignore-headline) ;; moved to hooks
 
   (setq org-ellipsis "⤵"
         org-list-allow-alphabetical t)
@@ -1754,6 +1754,7 @@
   (org-mode . yas-minor-mode)
   (org-mode . display-fill-column-indicator-mode)
   (org-mode . whitespace-mode)
+  (org-mode .(lambda () (setq tab-width 4)))
   :bind (("\C-cl" . org-store-link)
          :map org-mode-map
          ([remap org-cycle-agenda-files] . avy-goto-char)
@@ -1973,7 +1974,7 @@
        ((t (:background "#5f00af" :foreground "#5f00af")))))
   (diff-hl-margin-mode t)
   )
-
+;;; this is a test
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; git-timemachine
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2524,6 +2525,15 @@
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; gcode mode
+(use-package gcode-mode
+  :ensure t
+  :mode ("\\.nc\\'"
+         "\\.gcode\\'")
+  )
+
+
+
 ;; Extend eshell: Completion
 ;; https://timmydouglas.com/2020/12/18/eshell-complete.html
 (defun pcmpl-git-commands ()
@@ -2737,7 +2747,7 @@
         (list
          (list (openwith-make-extension-regexp
                 '("pdf"))
-               "acrord32"               ; adobe acrobat
+               "chrome"               ; adobe acrobat
                '(file))
          (list (openwith-make-extension-regexp
                 '("rtf"))
@@ -2762,6 +2772,18 @@
          (list (openwith-make-extension-regexp
                 '("dxf"))
                "sldworks"               ; Solidworks DXF
+               '(file))
+         (list (openwith-make-extension-regexp
+                '("gdoc"))
+               "chrome"                 ; google docs
+               '(file))
+         (list (openwith-make-extension-regexp
+                '("gsheet"))
+               "chrome"                 ; google sheets
+               '(file))
+         (list (openwith-make-extension-regexp
+                '("gslides"))
+               "chrome"                 ; google slides
                '(file))
          ))
   (openwith-mode 1)
@@ -2935,3 +2957,4 @@
 
 (provide '.emacs)
 ;;; .emacs ends here
+(put 'narrow-to-region 'disabled nil)

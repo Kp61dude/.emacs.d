@@ -4,7 +4,7 @@
 # key: org_skeleton
 # --
 #+STARTUP: hidestars logdone
-#+TODO: NEXT(n!) INCOMPLETE(i!) TODO(t!) CANCEL(c@!) DONE(d!)
+#+TODO: NEXT(n!) INCOMPLETE(i!) TODO(t!) CANCEL(c@!) WIP(w!) DONE(d!)
 #+EXPORT_SELECT_TAGS: export
 # #+OPTIONS: ^init
 # #+OPTIONS: toc:nil
