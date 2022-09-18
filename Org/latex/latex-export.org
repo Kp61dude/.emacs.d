@@ -1,0 +1,16 @@
+%#+LATEX_CLASS: org-plain-latex
+#+LATEX_CLASS_OPTIONS: [article]
+#+LATEX_HEADER: \usepackage[margin=0.125in]{geometry}
+#+LATEX_HEADER: \usepackage{lmodern} % Ensures we have the right font
+#+LATEX_HEADER: \usepackage[AUTO]{inputenc}
+#+LATEX_HEADER: \usepackage{graphicx}
+#+LATEX_HEADER: \usepackage{amsmath, amsthm, amssymb}
+#+LATEX_HEADER: \usepackage[table, xcdraw]{xcolor}
+#+LATEX_HEADER: \usepackage{fancyhrd}
+#+LATEX_HEADER: \usepackage{fancyplain}
+#+LATEX_HEADER: \chead{}
+#+LATEX_HEADER: \lhead{}
+#+LATEX_HEADER: \rhead{}
+#+LATEX_HEADER: \cfoot{}
+#+LATEX_HEADER: \lfoot{}
+#+LATEX_HEADER: \rfoot{}

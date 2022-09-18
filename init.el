@@ -1729,6 +1729,7 @@
   (org-mode . org-superstar-mode)
   (org-mode . turn-on-auto-fill)
   (org-mode . (lambda () (setq fill-column 100)))
+  (org-mode . (lambda () (setq tab-width 4)))
   (org-mode . yas-minor-mode)
   (org-mode . display-fill-column-indicator-mode)
   (org-mode . whitespace-mode)
