@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# contributor: Eric Sapiens 09-18-2022
+# name: org_latex
+# key: org_latex
+# --
+#+SETUPFILE: ~/.emacs.d/Org/latex/latex-export.org
+#+TITLE:
+#+SUBTITLE:
+#+DATE:
+
+#+AUTHOR: Eric Sapiens

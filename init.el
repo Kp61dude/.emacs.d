@@ -1699,6 +1699,18 @@
                (string-match "\\`.*ignoreheading.*\n"
                              (downcase contents)))
       (replace-match "" nil nil contents)))
+  ;; :after (:all org ox-latex)
+  ;; (add-to-list 'org-latex-classes
+  ;;            '("org-plain-latex"
+  ;;              "\\documentclass{article}
+  ;;           [NO-DEFAULT-PACKAGES]
+  ;;           [PACKAGES]
+  ;;           [EXTRA]"
+  ;;              ("\\section{%s}" . "\\section*{%s}")
+  ;;              ("\\subsection{%s}" . "\\subsection*{%s}")
+  ;;              ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+  ;;              ("\\paragraph{%s}" . "\\paragraph*{%s}")
+  ;;              ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
   :config
   (defun org-show-current-heading-tidily ()
     "Show next entry, keeping other entries closed."
@@ -2253,7 +2265,12 @@
 (setq inhibit-splash-screen t)
 
 ;; Hide the scroll bar
-(scroll-bar-mode -1)
+;; https://superuser.com/questions/601919/how-to-disable-scrollbars-for-new-frames-in-aquamacs-emacs
+(add-hook 'after-make-frame-functions
+          '(lambda (frame)
+             (modify-frame-parameters frame
+                                      '((vertical-scroll-bars . nil)
+                                        (horizontal-scroll-bars . nil)))))
 ;; Make mode bar small
 (set-face-attribute 'mode-line nil  :height my:font-size)
 ;; Set the header bar font
