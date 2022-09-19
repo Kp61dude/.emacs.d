@@ -3,10 +3,9 @@
 # name: org_skeleton
 # key: org_skeleton
 # --
-#+STARTUP: hidestars logdone
-#+TODO: NEXT(n!) INCOMPLETE(i!) TODO(t!) CANCEL(c@!) WIP(w!) DONE(d!)
-#+EXPORT_SELECT_TAGS: export
-# #+OPTIONS: ^init
-# #+OPTIONS: toc:nil
-# #+OPTIONS: tex:t'
-# #+OPTIONS: num:nil
+#+STARTUP: hidestars logdone content
+#+TODO: NEXT(n!) INCOMPLETE(i!) TODO(t!) CANCEL(c@!) DONE(d!)
+#+EXCLUDE_TAGS: noexport
+#+OPTIONS: timestamp:nil
+#+OPTIONS: toc:nil
+#+OPTIONS: ^init tex:t' num:nil
