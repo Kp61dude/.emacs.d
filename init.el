@@ -1205,15 +1205,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use undo-tree to navigate undo history
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package undo-tree
-  :ensure t
-  :diminish undo-tree-mode
-  :defer 1
-  :config
-  (eval-when-compile
-    ;; Silence missing function warnings
-    (declare-function global-undo-tree-mode "undo-tree.el"))
-  (global-undo-tree-mode))
+;; (use-package undo-tree
+;;   :ensure t
+;;   :diminish undo-tree-mode
+;;   :defer 1
+;;   :config
+;;   (eval-when-compile
+;;     ;; Silence missing function warnings
+;;     (declare-function global-undo-tree-mode "undo-tree.el"))
+;;   (global-undo-tree-mode))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; visual-regexp-steroids
@@ -1683,13 +1683,16 @@
          ;; ("C-<" . mc/mark-previous-like-this)
          ;; ("C-c C-<" . mc/mark-all-like-this)
          )
-  :config
-  (defalias 'mc/mark-all-lines-in-region 'mc/edit-lines)
+
+  :init
   (defun ar/set-mc/insert-numbers-starting-value ()
     "set starting value for inserting numbers using multiple cursors."
     (interactive)
     (set-variable 'mc/insert-numbers-default
                   (read-number "starting value: ")))
+
+  :config
+  (defalias 'mc/mark-all-lines-in-region 'mc/edit-lines)
   ;; mc-friendly packages.
   (use-package phi-search :ensure t)
   (use-package phi-rectangle :ensure t)
