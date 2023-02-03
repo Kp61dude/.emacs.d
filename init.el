@@ -21,7 +21,7 @@
 (defvar my:ycmd-global-config "~/.ycm_extra_conf.py")
 ;; In order to get python code completion with ycmd+jedi you must specify
 ;; the path to the python executable you're using.
-(defvar my:ycmd-python-binary-path "c:/Program Files/Python39")
+(defvar my:ycmd-python-binary-path "d:/Program Files/Python39")
 
 ;; Enable ycmd-eldoc support. Eldoc can cause delays when working with
 ;; template-heavy C++ code.
@@ -179,7 +179,11 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")
-                         ("gnu" . "http://elpa.gnu.org/packages/")))
+                         ("gnu" . "http://elpa.gnu.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ("org-plus-contrib" . "https://orgmode.org/elpa/")
+                         )
+      )
 ;; Disable package initialize after us.  We either initialize it
 ;; anyway in case of interpreted .emacs, or we don't want slow
 ;; initizlization in case of byte-compiled .emacs.elc.
@@ -188,7 +192,7 @@
 (defvar file-name-handler-alist-old file-name-handler-alist)
 (setq file-name-handler-alist nil)
 ;; Ask package.el to not add (package-initialize) to .emacs.
-(setq package--init-file-ensured t)
+;(setq package--init-file-ensured t)
 ;; set use-package-verbose to t for interpreted .emacs,
 ;; and to nil for byte-compiled .emacs.elc
 (eval-and-compile
@@ -1247,6 +1251,9 @@
 (add-hook 'python-mode-hook
           (lambda ()
             (setq tab-width 4)))
+(add-hook 'python-mode-hook
+          (lambda ()
+            (setq lsp-python-enable)))
 (setq-default pdb-command-name "python -m pdb")
 (use-package elpy
   :ensure t
@@ -1486,6 +1493,9 @@
          (shell-mode . lsp)
          ;; sql uses what? 06-08-2021
          (sql-interactive-mode . lsp)
+         ;; cpp mode
+         ;; (c-mode-hook . lsp-deferred)
+         ;; (c++-mode-hook . lsp-deferred)
          )
   :init
   ;; Disable yasnippet. We re-enable when yasnippet is loaded.
@@ -1537,7 +1547,9 @@
                                     "-j=4"
                                     "--enable-config"
                                     "--suggest-missing-includes"
-                                    "--pch-storage=memory"))
+                                    "--pch-storage=memory"
+                                    "-background-index"
+                                    "-log=error"))
   (setq lsp-enable-on-type-formatting nil)
   ;; (setq lsp-before-save-edits nil)
   ;; Use flycheck instead of flymake
@@ -1750,6 +1762,10 @@
   (add-to-list 'org-modules 'org-tempo)
   (use-package org-superstar
     :ensure t)
+  (use-package ox-extra
+    :after org
+    :config
+    (ox-extras-activate '(latex-header-blocks ignore-headlines)))
   :hook
   (org-mode . org-superstar-mode)
   (org-mode . turn-on-auto-fill)
@@ -2025,17 +2041,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Bazel-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(if (not (file-directory-p "~/.emacs.d/plugins/"))
-    (make-directory "~/.emacs.d/plugins/"))
-(if (not (file-exists-p "~/.emacs.d/plugins/bazel-mode.el"))
-    (url-copy-file
-     "https://raw.githubusercontent.com/codesuki/bazel-mode/master/bazel-mode.el"
-     "~/.emacs.d/plugins/bazel-mode.el"))
-(if (file-exists-p "~/.emacs.d/plugins/bazel-mode.el")
-    (use-package bazel-mode
-      :mode ("BUILD" "\\.bazel\\'" "\\.bzl'" "WORKSPACE\\'")
-      )
-  )
+;; (if (not (file-directory-p "~/.emacs.d/plugins/"))
+;;     (make-directory "~/.emacs.d/plugins/"))
+;; (if (not (file-exists-p "~/.emacs.d/plugins/bazel-mode.el"))
+;;     (url-copy-file
+;;      "https://raw.githubusercontent.com/codesuki/bazel-mode/master/bazel-mode.el"
+;;      "~/.emacs.d/plugins/bazel-mode.el"))
+;; (if (file-exists-p "~/.emacs.d/plugins/bazel-mode.el")
+;;     (use-package bazel-mode
+;;       :mode ("BUILD" "\\.bazel\\'" "\\.bzl'" "WORKSPACE\\'")
+;;       )
+;;   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; protobuf-mode
@@ -2308,7 +2324,7 @@
         (width . 110) (height . 50) ;; size
         ))
 ;; Enable line numbers on the LHS
-(global-linum-mode -1)
+;(global-linum-mode -1)
 ;; Set the font to size 9 (90/10).
 (set-face-attribute 'default nil :height my:font-size)
 
@@ -2527,6 +2543,35 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; delete this when finished
+(use-package ccls
+  :ensure t
+  :hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda () (require 'ccls) (lsp-mode))))
+
+
+;; arduino mode
+(use-package arduino-mode
+  :ensure t)
+
+;; include missing headers
+(defun ede-object-system-include-path ()
+  "Return the system include path for the current buffer."
+  (when ede-object
+    (ede-system-include-path ede-object)))
+
+(setq company-c-headers-path-system 'ede-object-system-include-path)
+
+
+
+
+;; platformio mode
+(use-package platformio-mode
+  :ensure t
+  :config
+  (define-key projectile-mode-map (kbd "C-c i") 'platformio-command-map)) ;;'projectile-command-map))
+
+
 
 ;; gcode mode
 (use-package gcode-mode
