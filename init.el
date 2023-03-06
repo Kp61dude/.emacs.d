@@ -66,7 +66,7 @@
 ;; - spacemacs-dark
 ;; - sourcerer
 ;; - doom-* (the doom themes https://github.com/hlissner/emacs-doom-themes)
-(defvar my:use-theme 'doom-one)
+(defvar my:use-theme 'doom-one-light)
 
 ;; Set my:use-dvorak-bindings to t if you use a Dvorak keyboard layout
 (defvar my:use-dvorak-bindings nil)
@@ -143,15 +143,16 @@
    '(company-tooltip-selection
      ((t (:background nil :underline t))))
    '(highlight
-     ((t (:background "nil" :foreground "nil" :underline t))))
+     ((t (:underline t))))
+     ;((t (:background "nil" :foreground "nil" :underline t))))
    )
 
   ;; Customize powerline colors. I like purple pink-ish
   (custom-set-faces
    '(powerline-active1
-     ((t (:background "black" :foreground "#c678dd" :bold t :underline t))))
+     ((t (:background "white" :foreground "#9e51b5" :bold t :underline t)))) ;; was #c678dd
    '(powerline-active2
-     ((t (:background "black" :foreground "#c678dd" :bold t :underline t))))
+     ((t (:background "white" :foreground "#9e51b5" :bold t :underline t)))) ;; was #c678dd
    )
 
   (set-face-attribute 'powerline-inactive1 nil :background
@@ -166,12 +167,12 @@
   ;; Custom face for avy
   (custom-set-faces
    '(avy-lead-face
-     ((t (:foreground "black" :background "#c678dd" :bold t :underline t)))))
+     ((t (:foreground "white" :background "#9e51b5" :bold t :underline t))))) ;; was #c678dd
 
-  ;; Make the background pure black because I find that easier to read
+  ;; Make the background pure white because I find that easier to read
   (custom-set-faces
    '(default
-      ((t (:background "black")))))
+      ((t (:background "white")))))
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -279,14 +280,14 @@
 ;; Disable the toolbar at the top since it's useless
 (if (functionp 'tool-bar-mode) (tool-bar-mode -1))
 
-;; Auto-wrap at 80 characters
-(setq-default auto-fill-function 'do-auto-fill)
+;; Auto-wrap at 100 characters
+;; (setq-default auto-fill-function 'do-auto-fill)
 ;; local variable
-(setq miFillColumn 110)
+(setq miFillColumn 150)
 (setq-default fill-column miFillColumn)
-(turn-on-auto-fill)
+;; (turn-on-auto-fill)
 ;; Disable auto-fill-mode in programming mode
-(add-hook 'prog-mode-hook (lambda () (auto-fill-mode -1)))
+;; (add-hook 'prog-mode-hook (lambda () (auto-fill-mode -1)))
 
 ;; Disable Emacs help on translation, e.g. C-x C-h actually
 ;; can do things now
@@ -1033,6 +1034,7 @@
   (winum-mode t)
   )
 
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; wgrep
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1058,32 +1060,6 @@
       (global-set-key (kbd "C-c r") 'rg-project))
     )
   )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; pinentry
-;; Allows typing in the password for the GPG agent from inside Emacs
-;;
-;; Note that you must have the line:
-;;   allow-emacs-pinentry
-;; inside ~/.gnupg/gpg-agent.conf and gpg 2.15+ and pinentry 0.9.5+
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package pinentry
-;;   :ensure t
-;;   :config
-;;   (if (and
-;;        (file-exists-p (file-truename "~/.gnupg/gpg-agent.conf"))
-;;        (string-match ".*allow-emacs-pinentry.*"
-;;                      (with-temp-buffer
-;;                        (insert-file-contents
-;;                         (file-truename "~/.gnupg/gpg-agent.conf"))
-;;                        (buffer-string))))
-;;       (progn
-;;         (setenv "INSIDE_EMACS" (format "%s,comint" emacs-version))
-;;         (pinentry-start))
-;;     (user-error "%s%s"
-;;                 "You must have allow-emacs-pinentry in your "
-;;                 "~/.gnupg/gpg-agent.conf")
-;;     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Edit server to allow editing of things in Chrome with Emacs
@@ -1361,6 +1337,7 @@
   :config
   (setq whitespace-style '(face lines-tail trailing tabs tab-mark))
   (setq-default whitespace-line-column miFillColumn)
+  (setq whitespace-line 'nil)
   )
 
 ;; Turn on whitespace mode globally except in magit-mode
@@ -1837,21 +1814,6 @@
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; autopair
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Automatically at closing brace, bracket and quote
-;; (use-package autopair
-;;   :ensure t
-;;   :diminish autopair-mode
-;;   :init
-;;   (eval-when-compile
-;;     ;; Silence missing function warnings
-;;     (declare-function autopair-global-mode "autopair.el"))
-;;   :config
-;;   (autopair-global-mode t)
-;;   )
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load hungry Delete, caus we're lazy
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Set hungry delete:
@@ -2222,6 +2184,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Appearance
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (when (string-equal my:use-theme "darcula")
   (use-package jetbrains-darcula-theme
     :ensure t
@@ -2280,7 +2243,7 @@
    '(company-template-field
      ((t (:background "#7B6000" :foreground "#073642"))))
    '(company-tooltip
-     ((t (:background "black" :foreground "DeepSkyBlue1"))))
+     ((t (:background "light green" :foreground "DeepSkyBlue1"))))
    '(company-tooltip-annotation
      ((t (:foreground "#93a1a1" :background "#073642"))))
    '(company-tooltip-common
@@ -2304,7 +2267,8 @@
        ((t (:background "#48225b" :weight bold))))
      '(ivy-minibuffer-match-face-4
        ((t (:background "#680a0a" :weight bold))))
-     '(which-func ((t (:foreground "#8fb28f")))))))
+     '(which-func ((t (:foreground "#8fb28f"))))))
+)
 
 ;; I don't care to see the splash screen
 (setq inhibit-splash-screen t)
@@ -2523,10 +2487,6 @@
     ))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; Below are configurations that are unique to my work
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Load c++-mode when opening charm++ interface files
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'auto-mode-alist '("\\.ci\\'" . c++-mode))
@@ -2686,7 +2646,7 @@
 
 
 ;;; change comment color for better viewing
-(set-face-foreground 'font-lock-comment-face "gray40") ; original doom-one is #5B6268
+(set-face-foreground 'font-lock-comment-face "forest green") ; original doom-one is #5B6268
 ;;; change string color
 ;; (set-face-foreground 'font-lock-string-face "red") ; not used
 
