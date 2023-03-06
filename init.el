@@ -182,6 +182,7 @@
                          ("gnu" . "http://elpa.gnu.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
                          ("org-plus-contrib" . "https://orgmode.org/elpa/")
+                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
                          )
       )
 ;; Disable package initialize after us.  We either initialize it
@@ -1762,9 +1763,11 @@
   (add-to-list 'org-modules 'org-tempo)
   (use-package org-superstar
     :ensure t)
-  (use-package ox-extra
-    :after org
+  (use-package org-contrib
+    :ensure t
+    ;;:after org
     :config
+    (require 'ox-extra)
     (ox-extras-activate '(latex-header-blocks ignore-headlines)))
   :hook
   (org-mode . org-superstar-mode)
