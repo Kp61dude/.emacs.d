@@ -21,7 +21,7 @@
 (defvar my:ycmd-global-config "~/.ycm_extra_conf.py")
 ;; In order to get python code completion with ycmd+jedi you must specify
 ;; the path to the python executable you're using.
-(defvar my:ycmd-python-binary-path "d:/Program Files/Python39")
+(defvar my:ycmd-python-binary-path "c:/Program Files/Python39")
 
 ;; Enable ycmd-eldoc support. Eldoc can cause delays when working with
 ;; template-heavy C++ code.
@@ -180,12 +180,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")
-                         ("gnu" . "http://elpa.gnu.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
-                         ("org-plus-contrib" . "https://orgmode.org/elpa/")
-                         ("nongnu" . "https://elpa.nongnu.org/nongnu/")
-                         )
-      )
+                         ("gnu" . "http://elpa.gnu.org/packages/")))
 ;; Disable package initialize after us.  We either initialize it
 ;; anyway in case of interpreted .emacs, or we don't want slow
 ;; initizlization in case of byte-compiled .emacs.elc.
@@ -194,7 +189,7 @@
 (defvar file-name-handler-alist-old file-name-handler-alist)
 (setq file-name-handler-alist nil)
 ;; Ask package.el to not add (package-initialize) to .emacs.
-;(setq package--init-file-ensured t)
+(setq package--init-file-ensured t)
 ;; set use-package-verbose to t for interpreted .emacs,
 ;; and to nil for byte-compiled .emacs.elc
 (eval-and-compile
@@ -1163,7 +1158,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package avy
   :ensure t
-  :bind (("C-M-s" . avy-goto-word-1)
+  :bind (("M-s" . avy-goto-word-1)
          ("C-M-c" . avy-goto-char-2)
          ("C-'" . avy-goto-char))
          ;; ([remap goto-line] . avy-goto-line))
@@ -1186,15 +1181,16 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Use undo-tree to navigate undo history
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (use-package undo-tree
-;;   :ensure t
-;;   :diminish undo-tree-mode
-;;   :defer 1
-;;   :config
-;;   (eval-when-compile
-;;     ;; Silence missing function warnings
-;;     (declare-function global-undo-tree-mode "undo-tree.el"))
-;;   (global-undo-tree-mode))
+(use-package undo-tree
+  :ensure t
+  :diminish undo-tree-mode
+  :defer 1
+  :config
+  (eval-when-compile
+    ;; Silence missing function warnings
+    (declare-function global-undo-tree-mode "undo-tree.el"))
+  (global-undo-tree-mode)
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; visual-regexp-steroids
@@ -1228,9 +1224,6 @@
 (add-hook 'python-mode-hook
           (lambda ()
             (setq tab-width 4)))
-(add-hook 'python-mode-hook
-          (lambda ()
-            (setq lsp-python-enable)))
 (setq-default pdb-command-name "python -m pdb")
 (use-package elpy
   :ensure t
@@ -1471,9 +1464,6 @@
          (shell-mode . lsp)
          ;; sql uses what? 06-08-2021
          (sql-interactive-mode . lsp)
-         ;; cpp mode
-         ;; (c-mode-hook . lsp-deferred)
-         ;; (c++-mode-hook . lsp-deferred)
          )
   :init
   ;; Disable yasnippet. We re-enable when yasnippet is loaded.
@@ -1525,9 +1515,7 @@
                                     "-j=4"
                                     "--enable-config"
                                     "--suggest-missing-includes"
-                                    "--pch-storage=memory"
-                                    "-background-index"
-                                    "-log=error"))
+                                    "--pch-storage=memory"))
   (setq lsp-enable-on-type-formatting nil)
   ;; (setq lsp-before-save-edits nil)
   ;; Use flycheck instead of flymake
@@ -1673,14 +1661,12 @@
          ;; ("C-<" . mc/mark-previous-like-this)
          ;; ("C-c C-<" . mc/mark-all-like-this)
          )
-
   :init
   (defun ar/set-mc/insert-numbers-starting-value ()
     "set starting value for inserting numbers using multiple cursors."
     (interactive)
     (set-variable 'mc/insert-numbers-default
                   (read-number "starting value: ")))
-
   :config
   (defalias 'mc/mark-all-lines-in-region 'mc/edit-lines)
   ;; mc-friendly packages.
@@ -1958,7 +1944,7 @@
        ((t (:background "#5f00af" :foreground "#5f00af")))))
   (diff-hl-margin-mode t)
   )
-;;; this is a test
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; git-timemachine
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -2006,17 +1992,17 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Bazel-mode
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;; (if (not (file-directory-p "~/.emacs.d/plugins/"))
-;;     (make-directory "~/.emacs.d/plugins/"))
-;; (if (not (file-exists-p "~/.emacs.d/plugins/bazel-mode.el"))
-;;     (url-copy-file
-;;      "https://raw.githubusercontent.com/codesuki/bazel-mode/master/bazel-mode.el"
-;;      "~/.emacs.d/plugins/bazel-mode.el"))
-;; (if (file-exists-p "~/.emacs.d/plugins/bazel-mode.el")
-;;     (use-package bazel-mode
-;;       :mode ("BUILD" "\\.bazel\\'" "\\.bzl'" "WORKSPACE\\'")
-;;       )
-;;   )
+(if (not (file-directory-p "~/.emacs.d/plugins/"))
+    (make-directory "~/.emacs.d/plugins/"))
+(if (not (file-exists-p "~/.emacs.d/plugins/bazel-mode.el"))
+    (url-copy-file
+     "https://raw.githubusercontent.com/codesuki/bazel-mode/master/bazel-mode.el"
+     "~/.emacs.d/plugins/bazel-mode.el"))
+(if (file-exists-p "~/.emacs.d/plugins/bazel-mode.el")
+    (use-package bazel-mode
+      :mode ("BUILD" "\\.bazel\\'" "\\.bzl'" "WORKSPACE\\'")
+      )
+  )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; protobuf-mode
@@ -2274,13 +2260,7 @@
 (setq inhibit-splash-screen t)
 
 ;; Hide the scroll bar
-;; https://superuser.com/questions/601919/how-to-disable-scrollbars-for-new-frames-in-aquamacs-emacs
-(add-hook 'after-make-frame-functions
-          '(lambda (frame)
-             (modify-frame-parameters frame
-                                      '((vertical-scroll-bars . nil)
-                                        (horizontal-scroll-bars . nil)))))
-
+(scroll-bar-mode -1)
 ;; Make mode bar small
 (set-face-attribute 'mode-line nil  :height my:font-size)
 ;; Set the header bar font
@@ -2291,7 +2271,7 @@
         (width . 110) (height . 50) ;; size
         ))
 ;; Enable line numbers on the LHS
-;(global-linum-mode -1)
+;;(global-linum-mode -1)
 ;; Set the font to size 9 (90/10).
 (set-face-attribute 'default nil :height my:font-size)
 
@@ -2507,44 +2487,6 @@
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-;; delete this when finished
-(use-package ccls
-  :ensure t
-  :hook ((c-mode c++-mode objc-mode cuda-mode) . (lambda () (require 'ccls) (lsp-mode))))
-
-
-;; arduino mode
-(use-package arduino-mode
-  :ensure t)
-
-;; include missing headers
-(defun ede-object-system-include-path ()
-  "Return the system include path for the current buffer."
-  (when ede-object
-    (ede-system-include-path ede-object)))
-
-(setq company-c-headers-path-system 'ede-object-system-include-path)
-
-
-
-
-;; platformio mode
-(use-package platformio-mode
-  :ensure t
-  :config
-  (define-key projectile-mode-map (kbd "C-c i") 'platformio-command-map)) ;;'projectile-command-map))
-
-
-
-;; gcode mode
-(use-package gcode-mode
-  :ensure t
-  :mode ("\\.nc\\'"
-         "\\.gcode\\'")
-  )
-
-
-
 ;; Extend eshell: Completion
 ;; https://timmydouglas.com/2020/12/18/eshell-complete.html
 (defun pcmpl-git-commands ()
@@ -2757,10 +2699,6 @@
   (setq openwith-associations
         (list
          (list (openwith-make-extension-regexp
-                '("pdf"))
-               "chrome"               ; adobe acrobat
-               '(file))
-         (list (openwith-make-extension-regexp
                 '("rtf"))
                "winword"                ; microsoft word
                '(file))
@@ -2783,18 +2721,6 @@
          (list (openwith-make-extension-regexp
                 '("dxf"))
                "sldworks"               ; Solidworks DXF
-               '(file))
-         (list (openwith-make-extension-regexp
-                '("gdoc"))
-               "chrome"                 ; google docs
-               '(file))
-         (list (openwith-make-extension-regexp
-                '("gsheet"))
-               "chrome"                 ; google sheets
-               '(file))
-         (list (openwith-make-extension-regexp
-                '("gslides"))
-               "chrome"                 ; google slides
                '(file))
          ))
   (openwith-mode 1)
@@ -2968,4 +2894,3 @@
 
 (provide '.emacs)
 ;;; .emacs ends here
-(put 'narrow-to-region 'disabled nil)
