@@ -180,7 +180,7 @@
 (setq package-archives '(("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("melpa" . "https://melpa.org/packages/")
                          ("gnu" . "http://elpa.gnu.org/packages/")
-                         ("org" . "https://orgmode.org/elpa/")
+                         ;;("org" . "https://orgmode.org/elpa/")
                          ("org-plus-contrib" . "https://orgmode.org/elpa/")
                          ("nongnu" . "https://elpa.nongnu.org/nongnu/")
                          )
