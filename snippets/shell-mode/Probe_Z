@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: Eric Sapiens 2021-01-24
+# name: Probe_Z
+# key: pz
+# --
+G30 X0 Y58

@@ -1,0 +1,8 @@
+# key: ifc
+# contrubutor: Eric Sapiens eric.sapiens@ga-asi.com
+# name: IF_END_IF
+# --
+IF ${1:$$(my/capitalize-all-chars)condition} THEN
+    // ${2:write a descriptive comment}
+    $0
+END_IF

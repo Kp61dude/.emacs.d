@@ -1,0 +1,34 @@
+%#+LATEX_CLASS: org-plain-latex
+#+LATEX_CLASS_OPTIONS: [letter]
+
+% Page geometry
+%#+LATEX_HEADER: \usepackage[ margin=1in]{geometry}
+#+LATEX_HEADER: \usepackage{geometry}
+#+LATEX_HEADER: \geometry{vmargin={.25in, 1in}, hmargin={.25in, .25in}}
+
+% Page numbering
+#+LATEX_HEADER: \pagenumbering{gobble}
+
+
+#+LATEX_HEADER: \usepackage{lmodern} % Ensures we have the right font
+#+LATEX_HEADER: \usepackage[AUTO]{inputenc}
+#+LATEX_HEADER: \usepackage{graphicx}
+#+LATEX_HEADER: \usepackage{amsmath, amsthm, amssymb}
+0#+LATEX_HEADER: \usepackage[table, xcdraw]{xcolor}
+#+LATEX_HEADER: \pagestyle{fancyplain}
+#+LATEX_HEADER: \chead{}
+#+LATEX_HEADER: \lhead{}
+#+LATEX_HEADER: \rhead{}
+#+LATEX_HEADER: \cfoot{}
+#+LATEX_HEADER: \lfoot{}
+#+LATEX_HEADER: \rfoot{}
+
+%#+LATEX_HEADER: \usepackage{fancyhrd} % need to add to org-latex-classes variable or whatever.
+%#+LATEX_CLASS: fancyhrd
+%#+LATEX_HEADER: \usepackage[AUTO]{lastpage}
+%#+LATEX_HEADER: \usepackage{fancyhrd} % need to add to org-latex-classes variable or whatever.
+%#+LATEX_HEADER: \renewcommand{\footrulewidth}{0.4pt}% default is 0pt
+%#+LATEX_HEADER: \lfoot{"TierIII is fun!" - said no one}
+%#+LATEX_HEADER: \rfoot{\thepage\ of \pageref{LastPage}}
+%#+LATEX_HEADER:  \hypersetup{colorlinks=true, linkcolor=black}
+%#+LATEX_HEADER: \renewcommand{\footrulewidth}{0.4pt}% default is 0pt

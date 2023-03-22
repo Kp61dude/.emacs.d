@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contrubutor: Eric Sapiens 2021-01-24
+# name: Factory_reset
+# key: reset
+# --
+M502

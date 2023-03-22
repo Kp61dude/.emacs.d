@@ -1,0 +1,51 @@
+
+
+
+
+* Org manual
+  Org mode webpage
+  [[https://orgmode.org/][orgmode.org]]
+
+** favorites
+*** promote heading by one level
+    M-RIGHT (org-do-demote)
+    https://orgmode.org/manual/Structure-Editing.html
+
+*** heading visibility
+    C-x n s (org-narrow-to-subtree)
+    https://orgmode.org/manual/Structure-Editing.html
+
+*** convert current line to heading
+    C-c * (org-toggle-heading)
+    https://orgmode.org/manual/Structure-Editing.html
+
+* Initial visibility
+  [[https://orgmode.org/manual/Initial-visibility.html][Initial visibility link]]
+  #+begin_src text
+    #+STARTUP: overview
+    #+STARTUP: content
+    #+STARTUP: showall
+    #+STARTUP: show2levels
+    #+STARTUP: show3levels
+    #+STARTUP: show4levels
+    #+STARTUP: show5levels
+    #+STARTUP: showeverything
+  #+end_src
+
+* Advanced Export Configuration eg. Ignore specific headings
+  [[https://orgmode.org/manual/Advanced-Export-Configuration.html][Advanced Export Configuration]]
+
+  [[https://stackoverflow.com/questions/10295177/is-there-an-equivalent-of-org-modes-b-ignoreheading-for-non-beamer-documents][stackoverflow example post]]
+#+begin_src elisp
+  (defun sa-ignore-headline (contents backend info)
+    "Ignore headlines with tag `ignoreheading'."
+    (when (and (org-export-derived-backend-p backend 'latex 'html 'ascii)
+               (string-match "\\`.*ignoreheading.*\n"
+                             (downcase contents)))
+      (replace-match "" nil nil contents)))
+
+  (add-to-list 'org-export-filter-headline-functions 'sa-ignore-headline)
+#+end_src
+
+* Nice Helpful Links
+  https://emacsclub.github.io/html/org_tutorial.html#sec-8

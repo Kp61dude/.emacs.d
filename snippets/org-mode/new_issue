@@ -1,0 +1,19 @@
+# -*- mode: snippet -*-
+# contributor: Eric Sapiens 09-18-2022
+# name: new_issue
+# key: new_issue
+# --
+* Failed Calibration
+** Slack Ticket:
+
+** POC:
+
+** POC Notes:
+
+** Started LDNA:
+
+** First Error LDNA:
+
+** End LDNA:
+
+** Notes
