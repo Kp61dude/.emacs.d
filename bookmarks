@@ -2,18 +2,7 @@
 ;;; This format is meant to be slightly human-readable;
 ;;; nevertheless, you probably don't want to edit it.
 ;;; -*- End Of Bookmark File Format Version Stamp -*-
-(("CMM"
- (filename . "d:/Users/Sapiens/Documents/Invoice/CMM/")
- (front-context-string . "MillerCNC_timesh")
- (rear-context-string . "463 01-15 08:59 ")
- (position . 510)
- (last-modified 25543 18667 671953 0))
-("jupiter"
- (filename . "c:/Users/EricSapiens/Documents/GitHub/jupiter/")
- (front-context-string . ".git\n  drwxrwxrw")
- (rear-context-string . "096 01-04 11:44 ")
- (position . 254))
-("init.el"
+(("init.el"
  (filename . "~/.emacs.d/init.el")
  (front-context-string . ";; initfile --- ")
  (rear-context-string)
