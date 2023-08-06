@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: Eric Sapiens 2023-08-06
+# name: nozzle_temp
+# key: nt
+# --
+M104 S$1$0

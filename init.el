@@ -129,7 +129,7 @@
   ;; (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin")))
 
 ;; Set font size. Font size is set to my:font-size/10
-(defvar my:font-size 110)
+(defvar my:font-size 120)
 
 ;; I find it much easier to use underline rather than actual
 ;; highlighting to read.
@@ -1497,6 +1497,8 @@
          ;; cpp mode
          ;; (c-mode-hook . lsp-deferred)
          ;; (c++-mode-hook . lsp-deferred)
+         ;; dart mode
+         (dart-mode . lsp)
          )
   :init
   ;; Disable yasnippet. We re-enable when yasnippet is loaded.
@@ -2546,6 +2548,29 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; flutter and dart
+(use-package dart-mode
+  :ensure t
+  ;; Optional
+  :hook (dart-mode . flutter-test-mode))
+
+(use-package flutter
+  :ensure t
+  :after dart-mode
+  :bind (:map dart-mode-map
+              ("C-M-x" . #'flutter-run-or-hot-reload))
+  :custom
+  (flutter-sdk-path "D:/Program Files/flutter")
+  )
+
+(use-package lsp-dart
+  :ensure t)
+
+(use-package lsp-ui :ensure t)
+;; (use-package hover :ensure t) ;; run app from desktop without emulator
+
 
 ;; delete this when finished
 (use-package ccls

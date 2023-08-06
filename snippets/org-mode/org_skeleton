@@ -6,6 +6,4 @@
 #+STARTUP: hidestars logdone content
 #+TODO: NEXT(n!) INCOMPLETE(i!) TODO(t!) CANCEL(c@!) DONE(d!)
 #+EXCLUDE_TAGS: noexport
-#+OPTIONS: timestamp:nil
-#+OPTIONS: toc:nil
-#+OPTIONS: ^init tex:t' num:nil
+#+OPTIONS: timestamp:nil toc:nil ^init tex:t' num:nil
