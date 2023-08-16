@@ -61,6 +61,8 @@
 
 ;; Compilation command for C/C++
 (defvar my:compile-command "clang++ -Wall -Wextra -std=c++17 ")
+;; Copilation command for C#
+(defvar my:compile-command_csharp "dotnet build")
 
 ;; Which theme to use.
 ;; - spacemacs-dark
@@ -1210,7 +1212,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package realgud
   :ensure t
-  :after (c-mode-common python-mode)
+  :after (c-mode-common python-mode csharp-mode)
   :init
   (setenv "TERM" "dumb")
   :config
@@ -1485,6 +1487,7 @@
     (add-hook 'rust-mode-hook 'set-local-keybinds-lsp-ui)
     (add-hook 'shell-mode-hook 'set-local-keybinds-lsp-ui)
     (add-hook 'sql-interactive-mode-hook 'set-local-keybinds-lsp-ui)
+    (add-hook 'csharp-mode 'set-local-keybinds-lsp-ui)
     )
 
   ;; Use as C++ completer if desired. We use the clangd backend.
@@ -2583,7 +2586,15 @@
   :ensure t
   :mode ("\\.cs\\'")
   :config
+  (setq compile-command my:compile-command_csharp)
   (setq tab-width 4)
+  (setq-default csharp-indent 4)
+  (setq-default csharp-indent-offset 4)
+  (add-hook 'csharp-mode-hook
+          (lambda ()
+            (setq tab-width 4)))
+  (define-key csharp-mode-map (kbd "C-c") nil) ; turn off comment-region
+  (define-key csharp-mode-map (kbd "C-c C-c") 'compile)
   )
 
 
