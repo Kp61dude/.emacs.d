@@ -21,7 +21,7 @@
 (defvar my:ycmd-global-config "~/.ycm_extra_conf.py")
 ;; In order to get python code completion with ycmd+jedi you must specify
 ;; the path to the python executable you're using.
-(defvar my:ycmd-python-binary-path "c:/Program Files/Python39")
+(defvar my:ycmd-python-binary-path "C:/Users/sapiens/AppData/Local/Programs/Python/Python311/")
 
 ;; Enable ycmd-eldoc support. Eldoc can cause delays when working with
 ;; template-heavy C++ code.
@@ -63,6 +63,8 @@
 (defvar my:compile-command "clang++ -Wall -Wextra -std=c++17 ")
 ;; Copilation command for C#
 (defvar my:compile-command_csharp "dotnet build")
+;; Compilation command for smcat
+(defvar my:compile-command_smcat "smcat -T pdf -d left-right");;"smcat -T pdf -d left-right"
 
 ;; Which theme to use.
 ;; - spacemacs-dark
@@ -118,7 +120,7 @@
 (defvar my:search-backend "ivy")
 
 ;; A list of modes for which to disable whitespace mode
-(defvar my:ws-disable-modes '(magit-mode help-mode Buffer-menu-mode dired-mode sql-interactive-mode grep-mode messages-buffer-mode))
+(defvar my:ws-disable-modes '(magit-mode help-mode Buffer-menu-mode dired-mode sql-interactive-mode grep-mode messages-buffer-mode compilation-mode))
 
 ;; Modes in which to disable auto-deleting of trailing whitespace
 (defvar my:ws-butler-global-exempt-modes
@@ -1221,11 +1223,22 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python mode settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(setq-default python-indent 4)
-(setq-default python-indent-offset 4)
-(add-hook 'python-mode-hook
-          (lambda ()
-            (setq tab-width 4)))
+(use-package python-mode
+  :ensure t
+  :custom
+  (python-shell-interpreter "python")
+  :hook
+  ((python-mode . (lambda ()
+                    (setq tab-width 4)))
+   (python-mode . lsp-deferred))
+  :config
+  (setq-default python-indent 4)
+  (setq-default python-indent-offset 4)
+  ;; (add-hook 'python-mode-hook
+  ;;           (lambda ()
+  ;;             (setq tab-width 4)))
+  )
+
 (setq-default pdb-command-name "python -m pdb")
 (use-package elpy
   :ensure t
@@ -1724,8 +1737,10 @@
 
   ;; (add-to-list 'org-export-before-parsing-hook #'sa-ignore-headline) ;; moved to hooks
 
-  (setq org-ellipsis "⤵"
-        org-list-allow-alphabetical t)
+  ;; (setq org-ellipsis "⤵")
+  (setq org-ellipsis "↓")
+  ;; (setq org-ellipsis " v")
+  (setq org-list-allow-alphabetical t)
   (add-to-list 'org-modules 'org-tempo)
   (use-package org-superstar
     :ensure t)
@@ -1735,6 +1750,7 @@
     :config
     (require 'ox-extra)
     (ox-extras-activate '(latex-header-blocks ignore-headlines)))
+  (setq org-adapt-indentation t)
   :hook
   (org-mode . org-superstar-mode)
   (org-mode . turn-on-auto-fill)
@@ -2490,6 +2506,35 @@
 ;;; Personally added
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package graphviz-dot-mode
+  :ensure t)
+
+
+
+
+(when (file-exists-p "~/.emacs.d/plugins/smcat-mode.el")
+  (message "SMCAT found dude!")
+  (use-package smcat-mode
+    :hook
+    (smcat-mode . (lambda () (setq tab-width 4)))
+    :init
+    (defun cur-file()
+      (file-name-nondirectory (buffer-file-name (current-buffer))))
+    :config
+    (setq tab-width 4)
+    (setq indent-tabs-mode nil)
+
+    ;; *compilation local to smcat*
+    ;;(setq compile-command my:compile-command_smcat)
+    ;;(define-key smcat-mode-map (kbd "C-c C-c") 'compile)
+    ;; https://stackoverflow.com/questions/12756531/using-the-current-buffers-file-name-in-m-x-compile
+    (add-hook 'smcat-mode-hook (lambda ()
+                                 (set (make-local-variable 'compile-command)
+                                      (concat "smcat -T png " (cur-file)))))
+  )
+)
+
+
 ;; Extend eshell: Completion
 ;; https://timmydouglas.com/2020/12/18/eshell-complete.html
 (defun pcmpl-git-commands ()
@@ -2571,7 +2616,7 @@
                       (file-name-directory default-directory)
                     (buffer-file-name))))
     (when filename
-      (x-select-text filename))))
+      (gui-select-text filename))))
 
 
 ;; mode for powershell
@@ -2616,7 +2661,8 @@
      "~/.emacs.d/plugins/iec61131-mode.el"))
 (when (file-exists-p "~/.emacs.d/plugins/iec61131-mode.el")
   (use-package iec61131-mode
-    :mode ("\\.TcGVL\\'"
+    :mode ("\\.st\\'"
+           "\\.TcGVL\\'"
            "\\.TcPOU\\'"
            "\\.TcDUT\\'")
     :hook
@@ -2903,5 +2949,5 @@
   )
 
 
-(provide '.emacs)
-;;; .emacs ends here
+(provide 'init.el)
+;;; init.el ends here

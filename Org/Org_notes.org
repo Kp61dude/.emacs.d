@@ -1,5 +1,4 @@
-
-
+#+STARTUP: overview
 
 
 * Org manual

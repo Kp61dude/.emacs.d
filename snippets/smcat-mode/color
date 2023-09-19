@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# contributor: Eric Sapiens 2023-08-30
+# name: color
+# key: cl
+# --
+[color="$1"]$0
