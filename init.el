@@ -71,6 +71,8 @@
 ;; - sourcerer
 ;; - doom-* (the doom themes https://github.com/hlissner/emacs-doom-themes)
 (defvar my:use-theme 'doom-one-light)
+;; (defvar my:dark-mode 't)
+(setq-default my:dark-mode 't)
 
 ;; Set my:use-dvorak-bindings to t if you use a Dvorak keyboard layout
 (defvar my:use-dvorak-bindings nil)
@@ -2437,11 +2439,11 @@
 
 ;; (my:set-custom-faces)
 
-;; (let ((beautify-settings "~/.emacs.d/plugins/beautify.el"))
-;;   (when (file-exists-p beautify-settings)
-;;     (load-file beautify-settings)
-;;     (message "beautify.el found dude!"))
-;;   )
+(let ((beautify-settings "~/.emacs.d/theme/beautify.el"))
+  (when (file-exists-p beautify-settings)
+    (load-file beautify-settings)
+    (message "beautify.el found dude!"))
+  )
 
 
 
