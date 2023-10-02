@@ -70,9 +70,8 @@
 ;; - spacemacs-dark
 ;; - sourcerer
 ;; - doom-* (the doom themes https://github.com/hlissner/emacs-doom-themes)
-(defvar my:use-theme 'doom-one-light)
-;; (defvar my:dark-mode 't)
-(setq-default my:dark-mode 't)
+;; (defvar my:use-theme 'doom-one-light)
+
 
 ;; Set my:use-dvorak-bindings to t if you use a Dvorak keyboard layout
 (defvar my:use-dvorak-bindings nil)
@@ -2276,28 +2275,28 @@
 ;;      '(which-func ((t (:foreground "#8fb28f"))))))
 ;; )
 
-;; ;; I don't care to see the splash screen
-;; (setq inhibit-splash-screen t)
+;; I don't care to see the splash screen
+(setq inhibit-splash-screen t)
 
-;; ;; Hide the scroll bar
-;; (scroll-bar-mode -1)
-;; ;; Make mode bar small
-;; (set-face-attribute 'mode-line nil  :height my:font-size)
-;; ;; Set the header bar font
-;; (set-face-attribute 'header-line nil  :height my:font-size)
-;; ;; Set default window size and position
-;; (setq default-frame-alist
-;;       '((top . 0) (left . 0) ;; position
-;;         (width . 110) (height . 50) ;; size
-;;         ))
-;; ;; Enable line numbers on the LHS
-;; ;;(global-linum-mode -1)
-;; ;; Set the font to size 9 (90/10).
-;; (set-face-attribute 'default nil :height my:font-size)
+;; Hide the scroll bar
+(scroll-bar-mode -1)
+;; Make mode bar small
+(set-face-attribute 'mode-line nil  :height my:font-size)
+;; Set the header bar font
+(set-face-attribute 'header-line nil  :height my:font-size)
+;; Set default window size and position
+(setq default-frame-alist
+      '((top . 0) (left . 0) ;; position
+        (width . 110) (height . 50) ;; size
+        ))
+;; Enable line numbers on the LHS
+;;(global-linum-mode -1)
+;; Set the font to size 9 (90/10).
+(set-face-attribute 'default nil :height my:font-size)
 
-;; (setq-default indicate-empty-lines t)
-;; (when (not indicate-empty-lines)
-;;   (toggle-indicate-empty-lines))
+(setq-default indicate-empty-lines t)
+(when (not indicate-empty-lines)
+  (toggle-indicate-empty-lines))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enable which function mode and set the header line to display both the

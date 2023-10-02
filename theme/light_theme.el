@@ -1,5 +1,7 @@
-
 (message "dark-mode off.")
+
+(setq my:use-theme 'doom-one-light)
+
 ;; init.el line #138
 ;; I find it much easier to use underline rather than actual
 ;; highlighting to read.
@@ -136,7 +138,7 @@
      '(ivy-minibuffer-match-face-4
        ((t (:background "#680a0a" :weight bold))))
      '(which-func ((t (:foreground "#8fb28f"))))))
-  )
+)
 
 ;; I don't care to see the splash screen
 (setq inhibit-splash-screen t)
@@ -304,3 +306,6 @@
                          "[%b]"))))))
 ;; Call the header line update
 (add-hook 'buffer-list-update-hook 'sl/display-header)
+
+;;; change comment color for better viewing
+(set-face-foreground 'font-lock-comment-face "forest green") ; original doom-one is #5B6268
