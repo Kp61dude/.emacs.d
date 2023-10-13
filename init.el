@@ -2290,6 +2290,13 @@
 
 ;; Hide the scroll bar
 (scroll-bar-mode -1)
+;; https://superuser.com/questions/601919/how-to-disable-scrollbars-for-new-frames-in-aquamacs-emacs
+(add-hook 'after-make-frame-functions
+          '(lambda (frame)
+             (modify-frame-parameters frame
+                                      '((vertical-scroll-bars . nil)
+                                        (horizontal-scroll-bars . nil)))))
+
 ;; Make mode bar small
 (set-face-attribute 'mode-line nil  :height my:font-size)
 ;; Set the header bar font
