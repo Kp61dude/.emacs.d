@@ -1718,6 +1718,16 @@
                              (downcase contents)))
       (replace-match "" nil nil contents)))
   :config
+  (setq org-latex-pdf-process
+        (let
+            ((cmd (concat "pdflatex -shell-escape -interaction nonstopmode"
+                          " --synctex=1"
+                          " -output-directory %o %f")))
+          (list cmd
+                "cd %o; if test -r %b.idx; then makeindex %b.idx; fi"
+                "cd %o; bibtex %b"
+                cmd
+                cmd)))
   (defun org-show-current-heading-tidily ()
     "Show next entry, keeping other entries closed."
     (interactive)
@@ -2514,13 +2524,27 @@
 ;;; Haven't decided to keep below... moves up once it's decided
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package graphviz-dot-mode
-  :ensure t
-  :hook ((graphviz-dot-mode . (lambda () (setq tab-width 4))))
-  :config
-  (setq graphviz-dot-indent-width 4)
-  (setq graphviz-dot-preview-extension "svg")
-  )
+(when (executable-find "gnuplot")
+  (use-package gnuplot
+    :ensure t
+    :mode ("\\.gp\\'")
+    :config
+    ;; (setq gnuplot-program "C:/Program Files/gnuplot/bin/gnuplot.exe")
+    (setq gnuplot-program-args "")
+    ;; active Babel languages
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((gnuplot . t)))
+    ))
+
+(when (executable-find "dot")
+  (use-package graphviz-dot-mode
+    :ensure t
+    :hook ((graphviz-dot-mode . (lambda () (setq tab-width 4))))
+    :config
+    (setq graphviz-dot-indent-width 4)
+    (setq graphviz-dot-preview-extension "svg")
+    ))
 
 
 (when (file-exists-p "~/.emacs.d/plugins/smcat-mode.el")
@@ -2625,7 +2649,7 @@
 ;; Clip current file to clipboard
 ;; https://stackoverflow.com/questions/18812938/copy-full-file-path-into-copy-paste-clipboard
 (defun clip-file ()
-  "Put the current file name on the clipboard"
+  "Put the current file name on the clipboard."
   (interactive)
   (let ((filename (if (equal major-mode 'dired-mode)
                       (file-name-directory default-directory)
@@ -2782,7 +2806,7 @@
                '(file))
          (list (openwith-make-extension-regexp
                 '("mp4"))
-               "wmplayer"               ;windows media player
+               "wmplayer"               ; windows media player
                '(file))
          (list (openwith-make-extension-regexp
                 '("sln"))
@@ -2799,6 +2823,10 @@
          (list (openwith-make-extension-regexp
                 '("dxf"))
                "sldworks"               ; Solidworks DXF
+               '(file))
+         (list (openwith-make-extension-regexp
+                '("pdf"))
+               "msedge"               ; microsoft edge
                '(file))
          ))
   (openwith-mode 1)

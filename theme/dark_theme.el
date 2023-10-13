@@ -35,9 +35,9 @@
                       (face-attribute 'powerline-active2 :foreground))
 
   ;; Custom face for avy
-  (custom-set-faces
-   '(avy-lead-face
-     ((t (:foreground "black" :background "#c678dd" :bold t :underline t)))))
+  ;; (custom-set-faces
+  ;;  '(avy-lead-face
+  ;;    ((t (:foreground "black" :background "#c678dd" :bold t :underline t)))))
 
   ;; Make the background pure black because I find that easier to read
   (custom-set-faces
@@ -132,10 +132,10 @@
        ((t (:background "#680a0a" :weight bold))))
      '(which-func ((t (:foreground "#8fb28f")))))))
 
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Enable which function mode and set the header line to display both the
 ;; path and the function we're in
-  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (which-function-mode t)
 
 ;; Remove function from mode bar
@@ -168,7 +168,7 @@
                                                   (window-body-width))
                                                (length sl/drop-str))
                                             (length sl/header))
-                                 ;; :background "red"
+                                 :background "red"
                                  :weight 'bold
                                  )))
           (concat
@@ -356,4 +356,4 @@
 (add-hook 'buffer-list-update-hook 'sl/display-header)
 
 ;;; change comment color for better viewing
-(set-face-foreground 'font-lock-comment-face "#5B6268")
+(set-face-foreground 'font-lock-comment-face "#828282")

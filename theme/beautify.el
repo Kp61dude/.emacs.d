@@ -1,4 +1,4 @@
-(defvar my:dark-mode 'nil)
+(defvar my:dark-mode 'true)
 
 (if my:dark-mode
     (load-file "~/.emacs.d/theme/dark_theme.el")
