@@ -2910,13 +2910,30 @@
           (if (= skip-distance 1)
               (not (memq (syntax-class (syntax-after (point))) '(2 3)))
             (<= me (point))))))
+    (defun sp--org-skip-slash (ms mb me)
+      "Non-nil if forward-slash is part of the outline marker."
+      (save-excursion
+        (goto-char mb)
+        (beginning-of-line)
+        (let ((skip-distance (skip-chars-forward "/")))
+          (if (= skip-distance 1)
+              (not (memq (syntax-class (syntax-after (point))) '(2 3)))
+            (<= me (point))))))
+    (defun sp-point-before-closed-bracket-p (_id action _context)
+      "Return t if point is followed by a symbol, nil otherwise.
+       This predicate is only tested on \"insert\" action."
+      (when (eq action 'insert)
+        (looking-at-p "\\]")))
 
     (sp-with-modes 'org-mode
       (sp-local-pair "'" nil :actions nil)
       (sp-local-pair "+" "+"
-                 :unless '(sp-point-after-word-p sp-point-at-bol-p)
-                 :wrap "C-*"
-                 :skip-match 'sp--org-skip-plus)))
+                     :unless '(sp-point-after-word-p sp-point-at-bol-p)
+                     :wrap "C-*"
+                     :skip-match 'sp--org-skip-plus)
+      (sp-local-pair "/" "/"
+                     :unless '(sp-point-before-word-p sp-point-after-word-p sp-point-before-closed-bracket-p)
+                     :skip-match 'sp--org-skip-slash)))
 
   (use-package smartparens-config
     :after smartparens
