@@ -4,11 +4,13 @@
 .mc-lists.el
 all-the-icons-fonts/
 auto-save-list/
+
 # bookmarks
 config.json
 elpa/
 elpy/
 forge-database.sqlite
+
 # init.el
 plugins/
 projectile-bookmarks.eld
@@ -27,3 +29,6 @@ custom.el
 /eshell/
 undo/*
 url/*
+
+# sql
+*.sqlite

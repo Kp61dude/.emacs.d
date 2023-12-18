@@ -21,7 +21,8 @@
 (defvar my:ycmd-global-config "~/.ycm_extra_conf.py")
 ;; In order to get python code completion with ycmd+jedi you must specify
 ;; the path to the python executable you're using.
-(defvar my:ycmd-python-binary-path "C:/Users/sapiens/AppData/Local/Programs/Python/Python311/")
+;;(defvar my:ycmd-python-binary-path "C:/Users/sapiens/AppData/Local/Programs/Python/Python311/")
+(defvar my:ycmd-python-binary-path "c:/Program Files/Python312/")
 
 ;; Enable ycmd-eldoc support. Eldoc can cause delays when working with
 ;; template-heavy C++ code.
@@ -314,7 +315,11 @@
 (global-set-key (kbd "C-c C-c") 'compile)
 
 ;; We don't want to type yes and no all the time so, do y and n
-(defalias 'yes-or-no-p 'y-or-n-p)
+;;(defalias 'yes-or-no-p 'y-or-n-p)
+(if (>= emacs-major-version 29)
+    (setopt use-short-answers t)
+  (defalias 'yes-or-no-p 'y-or-n-p))
+
 ;; Disable the horrid auto-save
 (setq auto-save-default nil)
 
@@ -770,11 +775,12 @@
               (ignore-errors
                 (file-remote-p (buffer-file-name)))
               (if (or (eq major-mode 'org-mode)
-                      (eq major-mode 'c++-mode))
-                  (<= (buffer-size) 50000)
+                      (eq major-mode 'c++-mode)
+                      (eq major-mode 'c-mode))
+                  (<= (buffer-size) 500000)
                 ;; The value 300000 is the default number of characters
                 ;; before falling back to counsel-grep from swiper.
-                (<= (buffer-size) 300000)))
+                (<= (buffer-size) 500000)))
           (swiper initial-input)
         (progn
           (when (file-writable-p buffer-file-name)
@@ -886,6 +892,53 @@
     :ensure t
     :diminish
     :after (:all lsp-mode ivy))
+
+  (use-package ivy-hydra
+    :ensure t
+    :diminish
+    :after (:all ivy hydra)
+    ;; :config
+    ;; (defhydra hydra-ivy (:hint nil :color pink)
+    ;;   "
+    ;;     ^ ^ ^ ^ ^ ^ | ^Call^      ^ ^  | ^Cancel^ | ^Options^ | Action _w_/_s_/_a_: %-14s(ivy-action-name)
+    ;;     ^-^-^-^-^-^-+-^-^---------^-^--+-^-^------+-^-^-------+-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^---------------------------
+    ;;     ^ ^ _p_ ^ ^ | _f_ollow occ_U_r | _i_nsert | _c_: calling %-5s(if ivy-calling \"on\" \"off\") _C_ase-fold: %-10`ivy-case-fold-search
+    ;;     _b_ ^+^ _f_ | _d_one      ^ ^  | _o_ops   | _M_: matcher %-5s(ivy--matcher-desc)^^^^^^^^^^^^ _T_runcate: %-11`truncate-lines
+    ;;     ^ ^ _n_ ^ ^ | _g_o        ^ ^  | ^ ^      | _<_/_>_: shrink/grow^^^^^^^^^^^^^^^^^^^^^^^^^^^^ _D_efinition of this menu
+    ;;   "
+    ;;   ;; arrows
+    ;;   ("b" ivy-beginning-of-buffer)
+    ;;   ("n" ivy-next-line)
+    ;;   ("p" ivy-previous-line)
+    ;;   ("f" ivy-end-of-buffer)
+    ;;   ;; mark
+    ;;   ("m" ivy-mark)
+    ;;   ("u" ivy-unmark)
+    ;;   ("DEL" ivy-unmark-backward)
+    ;;   ("t" ivy-toggle-marks)
+    ;;   ;; actions
+    ;;   ("o" keyboard-escape-quit :exit t)
+    ;;   ("r" ivy-dispatching-done :exit t)
+    ;;   ("C-g" keyboard-escape-quit :exit t)
+    ;;   ("i" nil)
+    ;;   ("C-o" nil)
+    ;;   ("f" ivy-alt-done :exit nil)
+    ;;   ("C-j" ivy-alt-done :exit nil)
+    ;;   ("d" ivy-done :exit t)
+    ;;   ("g" ivy-call)
+    ;;   ("C-m" ivy-done :exit t)
+    ;;   ("c" ivy-toggle-calling)
+    ;;   ("M" ivy-rotate-preferred-builders)
+    ;;   (">" ivy-minibuffer-grow)
+    ;;   ("<" ivy-minibuffer-shrink)
+    ;;   ("w" ivy-prev-action)
+    ;;   ("s" ivy-next-action)
+    ;;   ("a" ivy-hydra--read-action)
+    ;;   ("T" ivy-hydra--toggle-truncate-lines)
+    ;;   ("C" ivy-toggle-case-fold)
+    ;;   ("U" ivy-occur :exit t)
+    ;;   ("D" ivy-hydra--find-definition :exit t))
+    )
   )
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1230,12 +1283,17 @@
   :custom
   (python-shell-interpreter "python")
   :hook
-  ((python-mode . (lambda ()
-                    (setq tab-width 4)))
+  ((python-mode . (lambda () (setq tab-width 4)))
    (python-mode . lsp-deferred))
   :config
   (setq-default python-indent 4)
   (setq-default python-indent-offset 4)
+
+  (let ((miPy "python"))
+       (setq flycheck-json-python-json-executable 'miPy)
+       (setq lsp-ruff-lsp-python-path 'miPy))
+
+  (setq treemacs-python-executable "c:/Program Files/Python312/python.exe")
   ;; (add-hook 'python-mode-hook
   ;;           (lambda ()
   ;;             (setq tab-width 4)))
@@ -1303,6 +1361,9 @@
 (use-package cc-mode
   :ensure t
   :defer t
+  :bind (:map c-mode-map
+         ("<backspace>" . smart-hungry-delete-backward-char)
+         ("C-d" . smart-hungry-delete-forward-char))
   :init
   (add-to-list 'auto-mode-alist '("\\.tpp\\'" . c++-mode))
   (add-to-list 'auto-mode-alist '("\\.h\\'" . c++-mode))
@@ -1488,7 +1549,14 @@
   (use-package lsp-ui
     :ensure t
     :after lsp-mode
-    :hook (lsp-mode . lsp-ui-mode)
+    :hook
+    (lsp-mode . lsp-ui-mode)
+    (c-mode-common . set-local-keybinds-lsp-ui)
+    (python-mode . set-local-keybinds-lsp-ui)
+    (rust-mode . set-local-keybinds-lsp-ui)
+    (shell-mode . set-local-keybinds-lsp-ui)
+    (sql-interactive-mode . set-local-keybinds-lsp-ui)
+    (csharp-mode . set-local-keybinds-lsp-ui)
     :config
     ;; Use find references and definitions key bindings instead of CTags.
     (defun set-local-keybinds-lsp-ui ()
@@ -1497,12 +1565,12 @@
       (local-set-key (kbd "M-.") 'lsp-ui-peek-find-definitions)
       (local-set-key (kbd "M-?") 'lsp-ui-peek-find-references)
       )
-    (add-hook 'c-mode-common-hook 'set-local-keybinds-lsp-ui)
-    (add-hook 'python-mode-hook 'set-local-keybinds-lsp-ui)
-    (add-hook 'rust-mode-hook 'set-local-keybinds-lsp-ui)
-    (add-hook 'shell-mode-hook 'set-local-keybinds-lsp-ui)
-    (add-hook 'sql-interactive-mode-hook 'set-local-keybinds-lsp-ui)
-    (add-hook 'csharp-mode 'set-local-keybinds-lsp-ui)
+    ;; (add-hook 'c-mode-common-hook 'set-local-keybinds-lsp-ui)
+    ;; (add-hook 'python-mode-hook 'set-local-keybinds-lsp-ui)
+    ;; (add-hook 'rust-mode-hook 'set-local-keybinds-lsp-ui)
+    ;; (add-hook 'shell-mode-hook 'set-local-keybinds-lsp-ui)
+    ;; (add-hook 'sql-interactive-mode-hook 'set-local-keybinds-lsp-ui)
+    ;; (add-hook 'csharp-mode 'set-local-keybinds-lsp-ui)
     )
 
   ;; Use as C++ completer if desired. We use the clangd backend.
@@ -1705,7 +1773,9 @@
   (eval-when-compile
     ;; Silence missing function warnings
     (declare-function writegood-mode "writegood-mode.el"))
-  (add-hook 'org-mode-hook #'writegood-mode)
+  ;; (add-hook 'org-mode-hook #'writegood-mode)
+  :hook
+  (org-mode . writegood-mode)
   )
 
 (use-package org
@@ -1718,6 +1788,12 @@
                              (downcase contents)))
       (replace-match "" nil nil contents)))
   :config
+  (defun org-summary-todo (n-done n-not-done)
+    "Switch entry to DONE when all subentries are done, to TODO otherwise."
+    (let (org-log-done org-todo-log-states)   ; turn off logging
+      (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
+  ;; (add-hook 'org-after-todo-statistics-hook #'org-summary-todo)
+
   (setq org-latex-pdf-process
         (let
             ((cmd (concat "pdflatex -shell-escape -interaction nonstopmode"
@@ -1760,6 +1836,7 @@
     :config
     (require 'ox-extra)
     (ox-extras-activate '(latex-header-blocks ignore-headlines)))
+  ;;(setq org-export-backends )
   (setq org-adapt-indentation t)
   :hook
   (org-mode . org-superstar-mode)
@@ -1769,6 +1846,7 @@
   (org-mode . display-fill-column-indicator-mode)
   (org-mode . whitespace-mode)
   (org-mode .(lambda () (setq tab-width 4)))
+  (org-after-todo-statistics . org-summary-todo) ;; omitted the -hook in org-after-todo-statistics-hook per use-package manual
   :bind (("\C-cl" . org-store-link)
          :map org-mode-map
          ([remap org-cycle-agenda-files] . avy-goto-char)
@@ -1777,6 +1855,9 @@
          ("C-=" . er/mark-word)
          ([remap org-ctrl-c-tab] . org-show-current-heading-tidily)))
 
+;; When using 'special' characters (for Org mode) select a coding system
+;; to prevent Emacs from asking before every save attempt.
+(prefer-coding-system 'utf-8)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; vlf - handle open very large files
@@ -2060,7 +2141,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package json-mode
   :ensure t
-  :mode ("\\.json\\'" "\\.imp\\'"))
+  :mode ("\\.json\\'" "\\.imp\\'" "\\.content\\'"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; rust-mode
@@ -2527,9 +2608,43 @@
 (add-to-list 'auto-mode-alist '("\\.env\\'" . bash-mode))
 (add-to-list 'auto-mode-alist '("\\.toplevel\\'" . perl-mode))
 
+
+;; Enable disabled Emacs commands (to protect newbie users)
+(put 'narrow-to-region 'disabled nil)
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Haven't decided to keep below... moves up once it's decided
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+(global-set-key (kbd "M-<left>") 'previous-buffer)
+(global-set-key (kbd "M-<right>") 'next-buffer)
+
+
+(use-package lsp-treemacs
+  :ensure t
+  :config
+  (lsp-treemacs-sync-mode 1))
+
+(use-package bicycle
+  :after outline
+  :bind (:map outline-minor-mode-map
+              ([C-tab] . bicycle-cycle)
+              ([S-tab] . bicycle-cycle-global)))
+
+(use-package prog-mode
+  ;; :config
+  ;; (add-hook 'prog-mode-hook 'outline-minor-mode)
+  ;; (add-hook 'prog-mode-hook 'hs-minor-mode)
+  :hook
+  (prog-mode . outline-minor-mode)
+  (prog-mode . hs-minor-mode))
+
+
+;; New for Emacs 29.1
+;(keymap-gloabl-set (kbd "C-x j") #'duplicate-dwim)
+
+
 
 (when (executable-find "gnuplot")
   (use-package gnuplot
@@ -2674,7 +2789,7 @@
 
 ;; mode for C#
 (use-package csharp-mode
-  :ensure t
+  ;; :ensure t ;; csharp is builtin since version 29
   :mode ("\\.cs\\'")
   :config
   (setq compile-command my:compile-command_csharp)
@@ -2690,7 +2805,7 @@
 
 
 ;;; change comment color for better viewing
-(set-face-foreground 'font-lock-comment-face "forest green") ; original doom-one is #5B6268
+(set-face-foreground 'font-lock-comment-face "light sea green") ; original doom-one is #5B6268
 ;;; change string color
 ;; (set-face-foreground 'font-lock-string-face "red") ; not used
 
@@ -2783,11 +2898,30 @@
   :ensure t
   :config
   (smartparens-global-mode t)
-  ;;(require 'smartparens-config)
+
+  (use-package smartparens-org
+    :after smartparens
+    :config
+    (defun sp--org-skip-plus (ms mb me)
+      "Non-nil if plus is part of the outline marker."
+      (save-excursion
+        (goto-char mb)
+        (beginning-of-line)
+        (let ((skip-distance (skip-chars-forward "+")))
+          (if (= skip-distance 1)
+              (not (memq (syntax-class (syntax-after (point))) '(2 3)))
+            (<= me (point))))))
+
+    (sp-with-modes 'org-mode
+      (sp-local-pair "'" nil :actions nil)
+      (sp-local-pair "+" "+"
+                 :unless '(sp-point-after-word-p sp-point-at-bol-p)
+                 :wrap "C-*"
+                 :skip-match 'sp--org-skip-plus)))
+
   (use-package smartparens-config
     :after smartparens
     :config
-    (sp-local-pair 'org-mode "'" nil :actions nil)
     (sp-local-pair 'minibuffer-inactive-mode "'" nil :actions nil)))
 
 ;;; keep init.el clean and move custom-set-variables to ~/custom.el

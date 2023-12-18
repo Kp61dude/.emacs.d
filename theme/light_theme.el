@@ -9,11 +9,11 @@
   "Set custom faces after the theme is loaded."
   (custom-set-faces
    '(ivy-current-match
-     ((t (:background nil :underline t))))
+     ((t (:background unspecified :underline t))))
    '(company-tooltip
-     ((t (:background nil))))
+     ((t (:background unspecified))))
    '(company-tooltip-selection
-     ((t (:background nil :underline t))))
+     ((t (:background unspecified :underline t))))
    '(highlight
      ((t (:underline t))))
                                         ;((t (:background "nil" :foreground "nil" :underline t))))
