@@ -315,9 +315,8 @@
 (global-set-key (kbd "C-c C-c") 'compile)
 
 ;; We don't want to type yes and no all the time so, do y and n
-;;(defalias 'yes-or-no-p 'y-or-n-p)
 (if (>= emacs-major-version 29)
-    (setopt use-short-answers t)
+    (setopt use-short-answers 't)
   (defalias 'yes-or-no-p 'y-or-n-p))
 
 ;; Disable the horrid auto-save
