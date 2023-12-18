@@ -1787,7 +1787,32 @@
                              (downcase contents)))
       (replace-match "" nil nil contents)))
   :config
-  (defun org-summary-todo (n-done n-not-done)
+  (defun my/org-checkbox-todo ()
+    "Switch header TODO state to DONE when all checkboxes are ticked, to TODO otherwise"
+    (let ((todo-state (org-get-todo-state)) beg end)
+      (unless (not todo-state)
+        (save-excursion
+          (org-back-to-heading t)
+          (setq beg (point))
+          (end-of-line)
+          (setq end (point))
+          (goto-char beg)
+          (if (re-search-forward "\\[\\([0-9]*%\\)\\]\\|\\[\\([0-9]*\\)/\\([0-9]*\\)\\]"
+                                 end t)
+              (if (match-end 1)
+                  (if (equal (match-string 1) "100%")
+                      (unless (string-equal todo-state "DONE")
+                        (org-todo 'done))
+                    (unless (string-equal todo-state "TODO")
+                      (org-todo 'todo)))
+                (if (and (> (match-end 2) (match-beginning 2))
+                         (equal (match-string 2) (match-string 3)))
+                    (unless (string-equal todo-state "DONE")
+                      (org-todo 'done))
+                  (unless (string-equal todo-state "TODO")
+                    (org-todo 'todo)))))))))
+
+  (defun my/org-summary-todo (n-done n-not-done)
     "Switch entry to DONE when all subentries are done, to TODO otherwise."
     (let (org-log-done org-todo-log-states)   ; turn off logging
       (org-todo (if (= n-not-done 0) "DONE" "TODO"))))
@@ -1845,7 +1870,8 @@
   (org-mode . display-fill-column-indicator-mode)
   (org-mode . whitespace-mode)
   (org-mode .(lambda () (setq tab-width 4)))
-  (org-after-todo-statistics . org-summary-todo) ;; omitted the -hook in org-after-todo-statistics-hook per use-package manual
+  (org-after-todo-statistics . my/org-summary-todo) ;; omitted the -hook in org-after-todo-statistics-hook per use-package manual
+  (org-checkbox-statistics . my/org-checkbox-todo)
   :bind (("\C-cl" . org-store-link)
          :map org-mode-map
          ([remap org-cycle-agenda-files] . avy-goto-char)
