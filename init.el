@@ -2534,6 +2534,11 @@
 ;;; Haven't decided to keep below... moves up once it's decided
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+(use-package shell-mode
+  :hook
+  (shell-mode . yas-minor-mode)
+  )
+
 (when (executable-find "gnuplot")
   (use-package gnuplot
     :ensure t
