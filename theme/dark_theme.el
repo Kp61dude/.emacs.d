@@ -84,7 +84,7 @@
     :config
     (load-theme 'sourcerer t))
 
-  (set-face-background 'hl-line "#372E2D")
+  (set-face-background 'hl-line "#25352a");"#372E2D")
   ;; The minibuffer default colors with my theme are impossible to read,
   ;; so change them to something better using ivy-minibuffer-match-face.
 

@@ -48,3 +48,13 @@
 
 * Nice Helpful Links
   https://emacsclub.github.io/html/org_tutorial.html#sec-8
+
+* Markdown
+  To use this handy package you must first execute
+  #+begin_src string
+    M-x org-md-export-to-markdown
+  #+end_src
+  then this command will become available
+  #+begin_src string
+    C-c C-e m o
+  #+end_src

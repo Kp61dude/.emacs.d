@@ -1847,8 +1847,8 @@
 
   ;; (add-to-list 'org-export-before-parsing-hook #'sa-ignore-headline) ;; moved to hooks
 
-  ;; (setq org-ellipsis "⤵")
-  (setq org-ellipsis "↓")
+  (setq org-ellipsis " ⤵")
+  ;;(setq org-ellipsis "↓")
   ;; (setq org-ellipsis " v")
   (setq org-list-allow-alphabetical t)
   (add-to-list 'org-modules 'org-tempo)
@@ -2648,6 +2648,19 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;;; implement this https://stackoverflow.com/questions/36183071/how-can-i-preview-markdown-in-emacs-in-real-time
+;; it's a markdown preview thingy majiggy
+(use-package impatient-mode
+  :ensure t
+  :config
+  (defun markdown-html (buffer)
+    (princ (with-current-buffer buffer
+             (format "<!DOCTYPE html><html><title>Impatient Markdown</title><xmp theme=\"united\" style=\"display:none;\"> %s  </xmp><script src=\"http://ndossougbe.github.io/strapdown/dist/strapdown.js\"></script></html>" (buffer-substring-no-properties (point-min) (point-max))))
+           (current-buffer)))
+  )
+
+
+
 (global-set-key (kbd "M-<left>") 'previous-buffer)
 (global-set-key (kbd "M-<right>") 'next-buffer)
 
@@ -3013,10 +3026,10 @@
                 '("dxf"))
                "sldworks"               ; Solidworks DXF
                '(file))
-         (list (openwith-make-extension-regexp
-                '("pdf"))
-               "msedge"               ; microsoft edge
-               '(file))
+         ;; (list (openwith-make-extension-regexp
+         ;;        '("pdf"))
+         ;;       "msedge"               ; microsoft edge
+         ;;       '(file))
          ))
   (openwith-mode 1)
   )
