@@ -308,7 +308,8 @@
 (global-set-key (kbd "C-c C-c") 'compile)
 
 ;; We don't want to type yes and no all the time so, do y and n
-(defalias 'yes-or-no-p 'y-or-n-p)
+;; (defalias 'yes-or-no-p 'y-or-n-p)
+(setopt use-short-answers t)
 ;; Disable the horrid auto-save
 (setq auto-save-default nil)
 
@@ -1213,7 +1214,8 @@
   (eval-when-compile
     ;; Silence missing function warnings
     (declare-function global-undo-tree-mode "undo-tree.el"))
-  (global-undo-tree-mode))
+  (global-undo-tree-mode)
+  (setq undo-tree-history-directory-alist '(("." . "~/.emacs.d/undo"))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; visual-regexp-steroids
@@ -1723,20 +1725,21 @@
                              (downcase contents)))
       (replace-match "" nil nil contents)))
   :config
+  (setq org-adapt-indentation t)
   (defun org-show-current-heading-tidily ()
     "Show next entry, keeping other entries closed."
     (interactive)
     (if (save-excursion (end-of-line) (outline-invisible-p))
-        (progn (org-show-entry) (show-children))
+        (progn (org-fold-show-entry) (outline-show-children))
       (outline-back-to-heading)
-      (unless (and (bolp) (org-on-heading-p))
+      (unless (and (bolp) (org-at-heading-p))
         (org-up-heading-safe)
-        (hide-subtree)
+        (outline-hide-subtree)
         (error "Boundary reached"))
       (org-overview)
       (org-reveal t)
-      (org-show-entry)
-      (show-children)))
+      (org-fold-show-entry)
+      (outline-show-children)))
   ;; backend aware export preprocess hook
   ;; https://github.com/suvayu/.emacs.d/blob/master/org-mode-config.el#L234
 
@@ -1747,6 +1750,14 @@
   (add-to-list 'org-modules 'org-tempo)
   (use-package org-superstar
     :ensure t)
+  (if (file-directory-p "~/.emacs.d/org-contrib/")
+      ;; (add-to-list 'load-path "~/.emacs.d/org-contrib/lisp")
+    (use-package ox-extra
+      :load-path ("~/.emacs.d/org-contrib/lisp")
+      :config
+      (ox-extras-activate '(ignore-headlines)))
+    )
+  (use-package org-tempo)
   :hook
   (org-mode . org-superstar-mode)
   (org-mode . turn-on-auto-fill)
@@ -1872,7 +1883,7 @@
 ;; Flyspell Mode for Spelling Corrections
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package flyspell
-  :ensure t
+  ;; :ensure t
   :diminish flyspell-mode
   :hook ((text-mode . flyspell-mode)
          (prog-mode . flyspell-prog-mode)
@@ -1913,7 +1924,7 @@
   (define-key flyspell-mode-map (kbd "C-;") nil) ; turn this off as it runs into iedit default keybinding
   ;; brought over from my own setup
   (setq ispell-hunspell-dict-paths-alist
-        '(("en_US" "~/hunspell/dictionary/en_US.aff")))
+        '(("en_US" "~/hunspell/en_US.aff")))
   (setq ispell-local-dictionary "en_US")
   )
 
@@ -2298,7 +2309,7 @@
         (width . 110) (height . 50) ;; size
         ))
 ;; Enable line numbers on the LHS
-(global-linum-mode -1)
+;; (global-linum-mode -1)
 ;; Set the font to size 9 (90/10).
 (set-face-attribute 'default nil :height my:font-size)
 

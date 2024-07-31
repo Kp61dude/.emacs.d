@@ -25,3 +25,5 @@ custom.el
 /network-security.data
 /semanticdb/*
 /eshell/
+/org-persist/
+/undo/
