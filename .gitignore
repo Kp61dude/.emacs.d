@@ -11,6 +11,9 @@ elpa/
 elpy/
 forge-database.sqlite
 
+# breakpoints
+.dap-breakpoints
+
 # init.el
 plugins/
 projectile-bookmarks.eld

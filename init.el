@@ -122,7 +122,16 @@
 (defvar my:search-backend "ivy")
 
 ;; A list of modes for which to disable whitespace mode
-(defvar my:ws-disable-modes '(magit-mode help-mode Buffer-menu-mode dired-mode sql-interactive-mode grep-mode messages-buffer-mode compilation-mode))
+(defvar my:ws-disable-modes
+  '(magit-mode
+    help-mode
+    Buffer-menu-mode
+    dired-mode
+    sql-interactive-mode
+    grep-mode
+    messages-buffer-mode
+    compilation-mode
+    inferior-python-mode))
 
 ;; Modes in which to disable auto-deleting of trailing whitespace
 (defvar my:ws-butler-global-exempt-modes
@@ -1284,18 +1293,20 @@
   :hook
   ((python-mode . (lambda () (setq tab-width 4)))
    (python-mode . lsp-deferred))
+  :bind(:map python-mode-map
+             ("<backspace>" . py-electric-backspace)
+             ("C-d" . smart-hungry-delete-forward-char)
+             ("C-c C-c" . python-shell-send-buffer)
+             ("C-c C-p" . run-python))
   :config
   (setq-default python-indent 4)
   (setq-default python-indent-offset 4)
 
   (let ((miPy "python"))
-       (setq flycheck-json-python-json-executable 'miPy)
-       (setq lsp-ruff-lsp-python-path 'miPy))
+    (setq flycheck-json-python-json-executable 'miPy)
+    (setq lsp-ruff-lsp-python-path 'miPy))
 
   (setq treemacs-python-executable "c:/Program Files/Python312/python.exe")
-  ;; (add-hook 'python-mode-hook
-  ;;           (lambda ()
-  ;;             (setq tab-width 4)))
   )
 
 (setq-default pdb-command-name "python -m pdb")
@@ -1532,7 +1543,10 @@
 ;; https://github.com/emacs-lsp/lsp-mode
 (use-package lsp-mode
   :ensure t
-  :hook (;; Python on Linux/mac OS is pyls (python language server)
+  :hook (;; Javascript (ts-js language server)
+         (js-mode . lsp)
+         (javascript-mode . lsp)
+         ;; Python on Linux/mac OS is pyls (python language server)
          (python-mode . lsp)
          ;; Rust RLS (Rust Language Server) https://github.com/rust-lang/rls
          (rust-mode . lsp)
@@ -2646,6 +2660,33 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Haven't decided to keep below... moves up once it's decided
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+
+;; mermaid mode
+;; (use-package mermaid-mode
+;;   :ensure t)
+
+
+
+
+;; (use-package helm-lsp
+;;   :ensure t)
+;; (use-package helm-xref
+;;   :ensure t)
+;; (use-package dap-mode
+;;   :ensure t)
+
+
+
+
+;;; Tetris
+;; (use-package Tetris
+;;   :bind (("d" . tetris-rotate-next)
+;;          ("f" . tetris-rotate-prev))
+;;   )
+
+
+
 
 
 ;;; implement this https://stackoverflow.com/questions/36183071/how-can-i-preview-markdown-in-emacs-in-real-time
