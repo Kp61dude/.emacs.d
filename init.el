@@ -1846,16 +1846,16 @@
     "Show next entry, keeping other entries closed."
     (interactive)
     (if (save-excursion (end-of-line) (outline-invisible-p))
-        (progn (org-show-entry) (show-children))
+        (progn (org-fold-show-entry) (outline-show-children))
       (outline-back-to-heading)
-      (unless (and (bolp) (org-on-heading-p))
+      (unless (and (bolp) (org-at-heading-p))
         (org-up-heading-safe)
-        (hide-subtree)
+        (outline-hide-subtree)
         (error "Boundary reached"))
       (org-overview)
       (org-reveal t)
-      (org-show-entry)
-      (show-children)))
+      (org-fold-show-entry)
+      (outline-show-children)))
   ;; backend aware export preprocess hook
   ;; https://github.com/suvayu/.emacs.d/blob/master/org-mode-config.el#L234
 
@@ -1868,14 +1868,14 @@
   (add-to-list 'org-modules 'org-tempo)
   (use-package org-superstar
     :ensure t)
-  (use-package org-contrib
-    :ensure t
-    ;;:after org
-    :config
-    (require 'ox-extra)
-    (ox-extras-activate '(latex-header-blocks ignore-headlines)))
-  ;;(setq org-export-backends )
-  (setq org-adapt-indentation t)
+  (if (file-directory-p "~/.emacs.d/org-contrib/")
+      ;; (add-to-list 'load-path "~/.emacs.d/org-contrib/lisp") ;; included as a submodule now.
+    (use-package ox-extra
+      :load-path ("~/.emacs.d/org-contrib/lisp")
+      :config
+      (ox-extras-activate '(ignore-headlines)))
+    )
+  (use-package org-tempo)
   :hook
   (org-mode . org-superstar-mode)
   (org-mode . turn-on-auto-fill)
@@ -1992,7 +1992,7 @@
 ;; Flyspell Mode for Spelling Corrections
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package flyspell
-  :ensure t
+  ;; :ensure t
   :diminish flyspell-mode
   :hook ((text-mode . flyspell-mode)
          (prog-mode . flyspell-prog-mode)
@@ -2033,7 +2033,7 @@
   (define-key flyspell-mode-map (kbd "C-;") nil) ; turn this off as it runs into iedit default keybinding
   ;; brought over from my own setup
   (setq ispell-hunspell-dict-paths-alist
-        '(("en_US" "~/hunspell/dictionary/en_US.aff")))
+        '(("en_US" "~/hunspell/en_US.aff")))
   (setq ispell-local-dictionary "en_US")
   )
 

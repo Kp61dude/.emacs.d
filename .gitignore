@@ -35,3 +35,6 @@ url/*
 
 # sql
 *.sqlite
+
+# Org mode
+/org-persist/*

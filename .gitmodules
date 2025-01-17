@@ -1,0 +1,3 @@
+[submodule "org-contrib"]
+	path = org-contrib
+	url = https://github.com/emacsmirror/org-contrib.git
