@@ -131,7 +131,8 @@
     grep-mode
     messages-buffer-mode
     compilation-mode
-    inferior-python-mode))
+    inferior-python-mode
+    eshell-mode))
 
 ;; Modes in which to disable auto-deleting of trailing whitespace
 (defvar my:ws-butler-global-exempt-modes
@@ -1793,6 +1794,8 @@
 
 (use-package org
   :mode  ("\\.org\\'" . org-mode)
+
+
   :init
   (defun sa-ignore-headline (contents backend info)
     "Ignore headlines with tag `ignoreheading'."
@@ -1800,7 +1803,12 @@
                (string-match "\\`.*ignoreheading.*\n"
                              (downcase contents)))
       (replace-match "" nil nil contents)))
+
+
   :config
+  ; to enable resize of in-line images
+  (setq org-image-actual-width nil)
+
   (defun my/org-checkbox-todo ()
     "Switch header TODO state to DONE when all checkboxes are ticked, to TODO otherwise"
     (let ((todo-state (org-get-todo-state)) beg end)
@@ -1861,21 +1869,23 @@
 
   ;; (add-to-list 'org-export-before-parsing-hook #'sa-ignore-headline) ;; moved to hooks
 
-  (setq org-ellipsis " ⤵")
-  ;;(setq org-ellipsis "↓")
-  ;; (setq org-ellipsis " v")
+  (setq org-ellipsis " ⤵");; "↓" " v"
   (setq org-list-allow-alphabetical t)
+  (setq org-adapt-indentation t) ;; I don't know how org was handling indents
+                                 ;; recently but now I need this to get them back.
   (add-to-list 'org-modules 'org-tempo)
   (use-package org-superstar
     :ensure t)
   (if (file-directory-p "~/.emacs.d/org-contrib/")
       ;; (add-to-list 'load-path "~/.emacs.d/org-contrib/lisp") ;; included as a submodule now.
-    (use-package ox-extra
-      :load-path ("~/.emacs.d/org-contrib/lisp")
-      :config
-      (ox-extras-activate '(ignore-headlines)))
+      (use-package ox-extra
+        :load-path ("~/.emacs.d/org-contrib/lisp")
+        :config
+        (ox-extras-activate '(ignore-headlines)))
     )
   (use-package org-tempo)
+
+
   :hook
   (org-mode . org-superstar-mode)
   (org-mode . turn-on-auto-fill)
@@ -2662,6 +2672,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+
+
 ;; mermaid mode
 ;; (use-package mermaid-mode
 ;;   :ensure t)
@@ -3231,13 +3243,24 @@
 (when (file-exists-p "~/.emacs.d/plugins/anchored-transpose.el")
   (use-package anchored-transpose
     :commands anchored-transpose
+
     :init
     ;; which used to be transpose-words
     (global-unset-key (kbd "M-t"))
+
+    :config
+    (defun mi-reverse-region (beg end)
+      "It is bound to \\[mi-reverse-region].\nReverse characters between BEG and END."
+      (interactive "r")
+      (let ((region (buffer-substring beg end)))
+        (delete-region beg end)
+        (insert (nreverse region))))
+
     :bind
     (("M-t r" . anchored-transpose)
      ("M-t l" . transpose-lines)
-     ("M-t w" . transpose-words)))
+     ("M-t w" . transpose-words)
+     ("M-t v" . mi-reverse-region)))
   )
 
 

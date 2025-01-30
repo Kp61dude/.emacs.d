@@ -18,6 +18,17 @@
     C-c * (org-toggle-heading)
     https://orgmode.org/manual/Structure-Editing.html
 
+*** Emphasis and Monospace
+    C-c C-x C-f (org-emphasis)
+    https://orgmode.org/manual/Emphasis-and-Monospace.html
+
+    *bold*
+    /italic/
+    _underline_
+    =verbatim=
+    ~code~
+    +strike-through+
+
 * Initial visibility
   [[https://orgmode.org/manual/Initial-visibility.html][Initial visibility link]]
   #+begin_src text
