@@ -1288,7 +1288,7 @@
 ;; Python mode settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (use-package python-mode
-  :ensure t
+  ;; :ensure t
   :custom
   (python-shell-interpreter "python")
   :hook
