@@ -1287,27 +1287,40 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Python mode settings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(use-package python-mode
-  ;; :ensure t
+(use-package python
+  :ensure nil
   :custom
   (python-shell-interpreter "python")
-  :hook
-  ((python-mode . (lambda () (setq tab-width 4)))
-   (python-mode . lsp-deferred))
-  :bind(:map python-mode-map
-             ("<backspace>" . py-electric-backspace)
-             ("C-d" . smart-hungry-delete-forward-char)
-             ("C-c C-c" . python-shell-send-buffer)
-             ("C-c C-p" . run-python))
-  :config
   (setq-default python-indent 4)
   (setq-default python-indent-offset 4)
 
-  (let ((miPy "python"))
-    (setq flycheck-json-python-json-executable 'miPy)
-    (setq lsp-ruff-lsp-python-path 'miPy))
+  :hook
+  ((python-mode . (lambda () (setq tab-width 4)))
+   (python-mode . lsp-deferred))
 
-  (setq treemacs-python-executable "c:/Program Files/Python312/python.exe")
+  :bind (:map python-mode-map
+              ("<backspace>" . my/smart-hungry-backspace);smart-hungry-delete-backward-char)
+              ("DEL" . backward-delete-char)
+              ("C-d" . smart-hungry-delete-forward-char)
+              ("C-c C-c" . python-shell-send-buffer)
+              ("C-c C-p" . run-python))
+
+  :config
+  ;; Robust smart backspace that handles all cases
+  (defun my/smart-hungry-backspace ()
+    "Delete whitespace backward, handling edge cases safely."
+    (interactive)
+    (let ((pos (point)))
+      (skip-chars-backward " \t")
+      (if (/= pos (point))
+          (delete-region (point) pos)
+        (backward-delete-char-untabify 1))))
+
+  ;; (let ((miPy "python"))
+  ;;   (setq flycheck-json-python-json-executable 'miPy)
+  ;;   (setq lsp-ruff-lsp-python-path 'miPy))
+
+  ;; (setq treemacs-python-executable "c:/Program Files/Python312/python.exe")
   )
 
 (setq-default pdb-command-name "python -m pdb")
@@ -2672,6 +2685,34 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;; Disable macOS native shortcuts in Emacs
+;; Completely prevent macOS from hijacking  keys
+(when (eq system-type 'darwin)
+  ;; ===== macOS SPECIFIC SETTINGS =====
+  ;; Disable macOS native shortcuts in Emacs-mac
+  (setq mac-pass-command-to-system nil
+        mac-command-modifier 'super   ; Make Command key act as Super
+        mac-option-modifier 'meta     ; Make Option key act as Meta
+        ns-function-modifier 'hyper)  ; Make Fn key act as Hyper
+
+  ;; Unbind common macOS shortcuts
+  (global-unset-key (kbd "s-`"))  ; Window cycling
+  (global-unset-key (kbd "s-q"))  ; Quit (use C-x C-c instead)
+  (global-unset-key (kbd "s-w"))  ; Close window
+  (global-unset-key (kbd "s-m"))  ; Minimize
+
+  ;; Rebind to Emacs functions
+  (global-set-key (kbd "s-w") 'delete-window)  ; Use Emacs window close
+  (global-set-key (kbd "s-q") 'save-buffers-kill-terminal) ; Proper quit
+
+  ;; Disable Mission Control shortcuts
+  (defun disable-mac-shortcuts ()
+    (shell-command "defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 79 '{enabled = 0;}'")  ; Ctrl+↑
+    (shell-command "defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 80 '{enabled = 0;}'")  ; Ctrl+↓
+    (shell-command "defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 81 '{enabled = 0;}'")  ; Ctrl+←
+    (shell-command "defaults write com.apple.symbolichotkeys AppleSymbolicHotKeys -dict-add 82 '{enabled = 0;}'")) ; Ctrl+→
+
+  (disable-mac-shortcuts))
 
 
 ;; mermaid mode
