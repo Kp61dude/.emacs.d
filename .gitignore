@@ -1,7 +1,7 @@
 .cache/
 .last-package-update-day
 .lsp-session-v1
-.mc-lists.el
+# .mc-lists.el
 all-the-icons-fonts/
 auto-save-list/
 
