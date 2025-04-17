@@ -1,3 +1,6 @@
 [submodule "org-contrib"]
 	path = org-contrib
 	url = https://github.com/emacsmirror/org-contrib.git
+[submodule "ejira"]
+	path = ejira
+	url = https://github.com/nyyManni/ejira.git
