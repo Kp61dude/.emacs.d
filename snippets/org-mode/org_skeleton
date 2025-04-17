@@ -1,10 +1,10 @@
-# -*- mode: snippet -*-
-# contributor: Eric Sapiens 02-21-2021 update: 01-20-2025
+''# -*- mode: snippet -*-
+# contributor: Eric Sapiens 02-21-2021 update: 04-16-2025
 # name: org_skeleton
 # key: org_skeleton
 # --
 * settings
-    #+STARTUP: hidestars logdone content indent
+    #+STARTUP: hidestars logdone content inlineimages
     #+TODO: NEXT(n!) INCOMPLETE(i!) TODO(t!) CANCEL(c@!) DONE(d!)
     #+EXCLUDE_TAGS: noexport
     #+OPTIONS: timestamp:nil

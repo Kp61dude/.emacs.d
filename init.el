@@ -1871,8 +1871,10 @@
 
   (setq org-ellipsis " ⤵");; "↓" " v"
   (setq org-list-allow-alphabetical t)
-  (setq org-adapt-indentation t) ;; I don't know how org was handling indents
-                                 ;; recently but now I need this to get them back.
+  (org-indent-mode -1)
+  (setq org-adapt-indentation t)
+  (setq org-startup-indented 'nil)
+
   (add-to-list 'org-modules 'org-tempo)
   (use-package org-superstar
     :ensure t)
@@ -2672,7 +2674,15 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 
+;; Check out quelpa: https://github.com/quelpa/quelpa?tab=readme-ov-file#installing-packages
+;; Or this one called straight.el: https://github.com/radian-software/straight.el
 
+
+;; Attempt Jira with Emacs Org mode
+(when (file-exists-p (expand-file-name "~/.emacs.d/plugins/"))
+  (use-package ejira
+    :ensure nil)
+  )
 
 ;; mermaid mode
 ;; (use-package mermaid-mode
@@ -3024,14 +3034,17 @@
         (looking-at-p "\\]")))
 
     (sp-with-modes 'org-mode
-      (sp-local-pair "'" nil :actions nil)
+      (sp-local-pair "'" nil
+                     :actions nil)
       (sp-local-pair "+" "+"
                      :unless '(sp-point-after-word-p sp-point-at-bol-p)
                      :wrap "C-*"
                      :skip-match 'sp--org-skip-plus)
       (sp-local-pair "/" "/"
                      :unless '(sp-point-before-word-p sp-point-after-word-p sp-point-before-closed-bracket-p)
-                     :skip-match 'sp--org-skip-slash)))
+                     :skip-match 'sp--org-skip-slash)
+      (sp-local-pair "\*" "\*"
+                     :actions nil)))
 
   (use-package smartparens-config
     :after smartparens
